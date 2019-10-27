@@ -102,6 +102,7 @@ var createAds = () => {
         "y": y
       },
     };
+    console.log(x,y);
     adsArr.push(ad);
   }
   return adsArr;
@@ -118,8 +119,8 @@ map.classList.remove('map--faded');
 var renderPin = (pin) => {
   var pinElement = pinTemplate.cloneNode(true);
   var pinImg = pinElement.querySelector('img');
-  pinElement.style.left = `${pin.location.x}px`;
-  pinElement.style.top = `${pin.location.y}px`;
+  pinElement.style.left = `${pin.location.x - 20}px`;
+  pinElement.style.top = `${pin.location.y - 62}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
   return pinElement;
