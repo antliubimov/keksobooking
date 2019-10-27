@@ -5,7 +5,7 @@
  * @param max number
  * @returns {number}
  */
-var random = (min, max) => Math.round(min - 0.5 + Math.random()*(max - min + 1));
+var random = (min, max) => Math.abs(Math.round(min - 0.5 + Math.random()*(max - min + 1)));
 /**
  *
  * @param min number
@@ -37,9 +37,11 @@ var shuffle = (a) => {
   return arr;
 };
 
-var avatarNums = randomArr(1, 8);
+var avatarNums = shuffle([1,2,3,4,5,6,7,8]);
+
 var title = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
-var randomTitleNums = randomArr(0, 7);
+var randomTitleNums = shuffle([0,1,2,3,4,5,6,7]);
+
 var type = ['palace', 'flat', 'house', 'bungalow'];
 var rusType = (type) => {
   switch (type) {
@@ -60,8 +62,8 @@ var rusType = (type) => {
 var inOut = ['12:00', '13:00', '14:00'];
 var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 var randomFeatures = (features) => {
-  var length = random(1, features.length - 1);
-  var arrNums = randomArr(0, length);
+  var length = random(0, features.length);
+  var arrNums = randomArr(0, length - 1);
   var featuresArr = [];
   for (let i = 0; i < arrNums.length; i++) {
     featuresArr.push(features[arrNums[i]]);
@@ -76,13 +78,15 @@ var map = document.querySelector('.map');
 var createAds = () => {
   var adsArr = [];
   for (var i = 0; i < 8; i++) {
+    var x = random(0, 1200),
+        y = random(130, 630);
     var ad = {
       "author": {
         "avatar": `img/avatars/user0${avatarNums[i]}.png`,
       },
       "offer": {
         "title": title[randomTitleNums[i]],
-        "address": `${location.x}, ${location.y}`,
+        "address": `${x}, ${y}`,
         "price": random(1000, 1000000),
         "type": type[random(0, type.length - 1)],
         "rooms": random(1, 5),
@@ -94,9 +98,9 @@ var createAds = () => {
         "photos": shuffle(photos),
       },
       "location": {
-        x: random(0, 1200),
-        y: random(130, 630),
-      }
+        "x": x,
+        "y": y
+      },
     };
     adsArr.push(ad);
   }
@@ -130,8 +134,14 @@ var renderAd = (ad) => {
   adElement.querySelector('.popup__type').textContent = `${rusType(ad.offer.type)}`;
   adElement.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   adElement.querySelector('.popup__text--time').textContent = `Заезд послу ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-  // adElement.querySelector('.popup__text--features').textContent = `${ad.offer.address}`;
+  var featuresList = [...adElement.querySelector('.popup__features').children];
+  for (var featureLi of featuresList) {
+    if (!ad.offer.features.includes(featureLi.classList[1].replace(/feature--/, ''))) {
+      featureLi.style.display = 'none';
+    }
+  }
   adElement.querySelector('.popup__description').textContent = `${ad.offer.description}`;
+  // не отображать, нет стилей
   // var photos = adElement.querySelector('.popup__pictures');
   // ad.offer.photos.forEach(photo => {
   //   var li = document.createElement('li');
