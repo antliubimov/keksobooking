@@ -1,4 +1,11 @@
 'use strict';
+
+var TITLE = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
+var TYPE = ['palace', 'flat', 'house', 'bungalow'];
+var IN_OUT = ['12:00', '13:00', '14:00'];
+var FEATURES = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
+var PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg" , "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+
 /**
  *
  * @param min number
@@ -39,10 +46,7 @@ var shuffle = (a) => {
 
 var avatarNums = shuffle([1,2,3,4,5,6,7,8]);
 
-var TITLE = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
 var randomTitleNums = shuffle([0,1,2,3,4,5,6,7]);
-
-var TYPE = ['palace', 'flat', 'house', 'bungalow'];
 
 var getTranslateType = (type) => {
   switch (type) {
@@ -60,8 +64,6 @@ var getTranslateType = (type) => {
       break;
   }
 }
-var inOut = ['12:00', '13:00', '14:00'];
-var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 var randomFeatures = (features) => {
   var length = getRandomNumber(0, features.length);
   var arrNums = getRandomArray(0, length - 1);
@@ -72,7 +74,6 @@ var randomFeatures = (features) => {
   return  featuresArr;
 };
 
-var PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg" , "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
 
 var map = document.querySelector('.map');
 
@@ -94,9 +95,9 @@ var createAds = () => {
         "type": TYPE[getRandomNumber(0, TYPE.length - 1)],
         "rooms": getRandomNumber(1, 5),
         "guests": getRandomNumber(1, 10),
-        "checkin": inOut[getRandomNumber(0, inOut.length - 1)],
-        "checkout": inOut[getRandomNumber(0, inOut.length - 1)],
-        "features": randomFeatures(features),
+        "checkin": IN_OUT[getRandomNumber(0, IN_OUT.length - 1)],
+        "checkout": IN_OUT[getRandomNumber(0, IN_OUT.length - 1)],
+        "features": randomFeatures(FEATURES),
         "description": "",
         "photos": shuffle(PHOTOS),
       },
@@ -117,7 +118,6 @@ var ads = createAds();
 var template = document.querySelector('template');
 var pinTemplate = template.content.querySelector('.map__pin');
 var adTemplate = template.content.querySelector('.map__card');
-map.classList.remove('map--faded');
 
 var renderPin = (pin) => {
   var pinElement = pinTemplate.cloneNode(true);
@@ -165,6 +165,8 @@ for (var i = 0; i < ads.length; i++) {
   pinsFragment.appendChild(renderPin(ads[i]));
   adsFragment.appendChild(renderAd(ads[i]));
 }
-document.querySelector('.map__pins').appendChild(pinsFragment);
 
+document.querySelector('.map__pins').appendChild(pinsFragment);
 document.querySelector('.map__filters-container').before(adsFragment);
+
+// map.classList.remove('map--faded');
