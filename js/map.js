@@ -5,17 +5,17 @@
  * @param max number
  * @returns {number}
  */
-var random = (min, max) => Math.abs(Math.round(min - 0.5 + Math.random()*(max - min + 1)));
+var getRandomNumber = (min, max) => Math.abs(Math.round(min - 0.5 + Math.random()*(max - min + 1)));
 /**
  *
  * @param min number
  * @param max number
  * @returns {[]}
  */
-var randomArr = (min, max) => {
+var getRandomArray = (min, max) => {
   var arr = [];
   while (arr.length < max) {
-    var elem = random(min, max);
+    var elem = getRandomNumber(min, max);
     if (!arr.includes(elem)) {
       arr.push(elem);
     }
@@ -39,11 +39,12 @@ var shuffle = (a) => {
 
 var avatarNums = shuffle([1,2,3,4,5,6,7,8]);
 
-var title = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
+var TITLE = ["Большая уютная квартира", "Маленькая неуютная квартира", "Огромный прекрасный дворец", "Маленький ужасный дворец", "Красивый гостевой домик", "Некрасивый негостеприимный домик", "Уютное бунгало далеко от моря", "Неуютное бунгало по колено в воде"];
 var randomTitleNums = shuffle([0,1,2,3,4,5,6,7]);
 
-var type = ['palace', 'flat', 'house', 'bungalow'];
-var rusType = (type) => {
+var TYPE = ['palace', 'flat', 'house', 'bungalow'];
+
+var getTranslateType = (type) => {
   switch (type) {
     case 'palace':
       return 'Дворец';
@@ -62,8 +63,8 @@ var rusType = (type) => {
 var inOut = ['12:00', '13:00', '14:00'];
 var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 var randomFeatures = (features) => {
-  var length = random(0, features.length);
-  var arrNums = randomArr(0, length - 1);
+  var length = getRandomNumber(0, features.length);
+  var arrNums = getRandomArray(0, length - 1);
   var featuresArr = [];
   for (let i = 0; i < arrNums.length; i++) {
     featuresArr.push(features[arrNums[i]]);
@@ -71,45 +72,47 @@ var randomFeatures = (features) => {
   return  featuresArr;
 };
 
-var photos = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg" , "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+var PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg" , "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
 
 var map = document.querySelector('.map');
 
 var createAds = () => {
   var adsArr = [];
+
   for (var i = 0; i < 8; i++) {
-    var x = random(0, 1200),
-        y = random(130, 630);
+    var x = getRandomNumber(0, 1200),
+        y = getRandomNumber(130, 630);
+
     var ad = {
       "author": {
         "avatar": `img/avatars/user0${avatarNums[i]}.png`,
       },
       "offer": {
-        "title": title[randomTitleNums[i]],
+        "title": TITLE[randomTitleNums[i]],
         "address": `${x}, ${y}`,
-        "price": random(1000, 1000000),
-        "type": type[random(0, type.length - 1)],
-        "rooms": random(1, 5),
-        "guests": random(1, 10),
-        "checkin": inOut[random(0, inOut.length - 1)],
-        "checkout": inOut[random(0, inOut.length - 1)],
+        "price": getRandomNumber(1000, 1000000),
+        "type": TYPE[getRandomNumber(0, TYPE.length - 1)],
+        "rooms": getRandomNumber(1, 5),
+        "guests": getRandomNumber(1, 10),
+        "checkin": inOut[getRandomNumber(0, inOut.length - 1)],
+        "checkout": inOut[getRandomNumber(0, inOut.length - 1)],
         "features": randomFeatures(features),
         "description": "",
-        "photos": shuffle(photos),
+        "photos": shuffle(PHOTOS),
       },
       "location": {
         "x": x,
         "y": y
       },
     };
-    console.log(x,y);
+
     adsArr.push(ad);
   }
+
   return adsArr;
 };
 
 var ads = createAds();
-//console.log(ads);
 
 var template = document.querySelector('template');
 var pinTemplate = template.content.querySelector('.map__pin');
@@ -132,7 +135,7 @@ var renderAd = (ad) => {
   adElement.querySelector('.popup__title').textContent = `${ad.offer.title}`;
   adElement.querySelector('.popup__text--address').textContent = `${ad.offer.address}`;
   adElement.querySelector('.popup__price').textContent = `${ad.offer.price}₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = `${rusType(ad.offer.type)}`;
+  adElement.querySelector('.popup__type').textContent = `${getTranslateType(ad.offer.type)}`;
   adElement.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
   adElement.querySelector('.popup__text--time').textContent = `Заезд послу ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
   var featuresList = [...adElement.querySelector('.popup__features').children];
