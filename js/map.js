@@ -10,9 +10,11 @@ var MAIN_PIN = {
   WIDTH: 62,
   HEIGHT: 84,
 };
+
 var getLocation = (element) => {
     return [element.offsetLeft, element.offsetTop];
 };
+
 
 var DRAG_LIMIT = {
   X: {
@@ -203,6 +205,7 @@ var map = document.querySelector('.map');
 var adForm = document.querySelector('.notice__form');
 var inputAddress = document.querySelector('#address');
 var mapPinMain = document.querySelector('.map__pin--main');
+var MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
 
 var onMapPinMainActiveState = () => {
   map.classList.remove('map--faded');
@@ -220,6 +223,7 @@ var onMapPinMainDeactiveState = () => {
       pin.remove();
     }
   });
+  [mapPinMain.offsetLeft, mapPinMain.offsetTop] = MAIN_PIN_START_LOCATION;
   isPageActive = false;
 };
 
