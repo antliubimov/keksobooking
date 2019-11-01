@@ -1,5 +1,6 @@
 'use strict';
 var isPageActive = false;
+var ESC_KEY = 'Escape';
 var TAIL_HEIGTH = 16;
 var PIN_SIZE = {
   WIDTH: 46,
@@ -147,7 +148,14 @@ var createPin = (pin) => {
     adFragment.appendChild(createAd(pin));
     document.querySelector('.map__filters-container').before(adFragment);
   };
+  var onPinElementEscPress = (evt) => {
+      var mapCard = document.querySelector('.map__card');
+      if (mapCard && evt.key === ESC_KEY) {
+        mapCard.remove();
+      }
+  };
   pinElement.addEventListener('click', onPinElementClick);
+  pinElement.addEventListener('keydown', onPinElementEscPress);
   return pinElement;
 };
 
