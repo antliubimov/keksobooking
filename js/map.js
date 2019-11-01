@@ -1,7 +1,7 @@
 'use strict';
 var isPageActive = false;
 var ESC_KEY = 'Escape';
-var TAIL_HEIGTH = 16;
+var TAIL_HEIGHT = 16;
 var PIN_SIZE = {
   WIDTH: 46,
   HEIGHT: 62
@@ -14,7 +14,6 @@ var MAIN_PIN = {
 var getLocation = (element) => {
     return [element.offsetLeft, element.offsetTop];
 };
-
 
 var DRAG_LIMIT = {
   X: {
