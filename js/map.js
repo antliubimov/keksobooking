@@ -1,13 +1,22 @@
 'use strict';
+var isPageActive = false;
 var TAIL_HEIGTH = 16;
 var PIN_SIZE = {
   WIDTH: 46,
   HEIGHT: 62
 };
+var MAIN_PIN = {
+  WIDTH: 62,
+  HEIGHT: 84,
+};
+var getLocation = (element) => {
+    return [element.offsetLeft, element.offsetTop];
+};
+
 var DRAG_LIMIT = {
   X: {
-    MIN: 0,
-    MAX: 1200
+    MIN: PIN_SIZE.WIDTH / 2,
+    MAX: 1200 - PIN_SIZE.WIDTH / 2
   },
   Y: {
     MIN: 130,
@@ -191,11 +200,32 @@ var onMapPinMainActiveState = () => {
   map.classList.remove('map--faded');
   adForm.classList.remove('notice__form--disabled');
   document.querySelector('.map__pins').appendChild(renderPins(ads));
-  //
-};
-var onMapPinMainWatchAddress = (e) => {
-  console.log(e);
+  isPageActive = true;
 };
 
-mapPinMain.addEventListener('mouseup', onMapPinMainActiveState);
-mapPinMain.addEventListener('mouseup', onMapPinMainWatchAddress);
+var onMapPinMainDeactiveState = () => {
+  map.classList.add('map--faded');
+  adForm.classList.add('notice__form--disabled');
+  var pins = document.querySelectorAll('.map__pin');
+  pins.forEach(pin => {
+    if (!pin.classList.contains('map__pin--main')) {
+      pin.remove();
+    }
+  });
+  isPageActive = false;
+};
+
+var onMapPinMainWatchAddress = () => {
+  inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
+};
+
+var onMapPinMainMouseUp = () => {
+  if (isPageActive) {
+    onMapPinMainWatchAddress();
+  } else {
+    onMapPinMainActiveState();
+    onMapPinMainWatchAddress();
+  }
+};
+
+mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
