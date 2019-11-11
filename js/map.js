@@ -97,7 +97,7 @@ var createAds = () => {
 
   for (var i = 0; i < 8; i++) {
   var x = getRandomNumber(DRAG_LIMIT.X.MIN, DRAG_LIMIT.X.MAX),
-        y = getRandomNumber(DRAG_LIMIT.Y.MIN,
+      y = getRandomNumber(DRAG_LIMIT.Y.MIN,
           DRAG_LIMIT.Y.MAX);
 
     var ad = {
@@ -176,15 +176,17 @@ var createAd = (ad) => {
     }
   }
   adElement.querySelector('.popup__description').textContent = `${ad.offer.description}`;
-  // не отображать, нет стилей
-  // var photos = adElement.querySelector('.popup__pictures');
-  // ad.offer.photos.forEach(photo => {
-  //   var li = document.createElement('li');
-  //   var img = document.createElement('img');
-  //   img.src = photo;
-  //   li.appendChild(img);
-  //   photos.appendChild(li);
-  // });
+  var photos = adElement.querySelector('.popup__pictures');
+  ad.offer.photos.forEach(photo => {
+    var li = document.createElement('li');
+    var img = document.createElement('img');
+    img.src = photo;
+    img.width = 45;
+    img.height = 40;
+    li.appendChild(img);
+    li.classList.add('popup__picture');
+    photos.appendChild(li);
+  });
   var adClose = adElement.querySelector('.popup__close');
   var onAdCloseClick = () => {
     adElement.remove();

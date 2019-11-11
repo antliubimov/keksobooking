@@ -374,9 +374,27 @@ textarea:focus {
   margin-bottom: 0.3em;
 }
 
-.popup__pictures li {
+.popup__pictures {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.popup__picture img {
   display: inline-block;
   vertical-align: middle;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border: 2px solid transparent;
+}
+
+.popup__picture img:hover {
+  border: 2px solid #ff5635;
 }
 
 .popup__avatar {
