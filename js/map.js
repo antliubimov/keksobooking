@@ -108,7 +108,7 @@ var createAds = () => {
         "title": TITLE[randomTitleNums[i]],
         "address": `${x}, ${y}`,
         "price": getRandomNumber(1000, 1000000),
-        "type": getRandomKey(TYPE),
+        "type": TYPE[getRandomKey(TYPE)],
         "rooms": getRandomNumber(1, 5),
         "guests": getRandomNumber(1, 10),
         "checkin": IN_OUT[getRandomNumber(0, IN_OUT.length - 1)],
@@ -242,3 +242,30 @@ var onMapPinMainMouseUp = () => {
 };
 
 mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
+
+
+/*
+* Validation
+* */
+var TITLE_LENGTH = {
+  MIN: 30,
+  MAX: 100
+};
+
+var maxPrice = 1000000;
+var houseTypeMinPrice = {
+  bungalow: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
+
+var adFormTitle = document.querySelector('#title');
+var onAdFormTitleInput = (evt) => {
+  var title = evt.target.value;
+  if (title.length < TITLE_LENGTH.MIN || title.length > TITLE_LENGTH.MAX) {
+    adFormTitle.setCustomValidity('Заголовок объявление должен быть не менее 30 и не более 100 символов')
+  }
+};
+adFormTitle.addEventListener('input', onAdFormTitleInput);
