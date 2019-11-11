@@ -73,7 +73,11 @@ var shuffle = (a) => {
   }
   return arr;
 };
-
+/**
+ * Returns random key of object
+ * @param obj
+ * @returns {string}
+ */
 var getRandomKey = function (obj) {
   var keys = Object.keys(obj);
   return keys[getRandomNumber(0, keys.length - 1)];
@@ -133,35 +137,38 @@ var ads = createAds();
 
 var template = document.querySelector('template');
 var pinTemplate = template.content.querySelector('.map__pin');
-var adTemplate = template.content.querySelector('.map__card');
+var mapCardTemplate = document.querySelector('.map__card');
 
 var createPin = (pin) => {
   var pinElement = pinTemplate.cloneNode(true);
   var pinImg = pinElement.querySelector('img');
+
   pinElement.style.left = `${pin.location.x - PIN_SIZE.WIDTH / 2}px`;
   pinElement.style.top = `${pin.location.y - PIN_SIZE.HEIGHT}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
-  var onPinElementClick = () => {
-    var mapCard = document.querySelector('.map__card');
-    if (mapCard) mapCard.remove();
-    var adFragment = document.createDocumentFragment();
-    adFragment.appendChild(createAd(pin));
-    document.querySelector('.map__filters-container').before(adFragment);
-  };
-  var onPinElementEscPress = (evt) => {
-      var mapCard = document.querySelector('.map__card');
-      if (mapCard && evt.key === ESC_KEY) {
-        mapCard.remove();
-      }
-  };
+
   pinElement.addEventListener('click', onPinElementClick);
   pinElement.addEventListener('keydown', onPinElementEscPress);
+
   return pinElement;
 };
 
+
+var onPinElementClick = () => {
+  if (mapCardTemplate) mapCardTemplate.remove();
+  var adFragment = document.createDocumentFragment();
+  adFragment.appendChild(createAd(pin));
+  document.querySelector('.map__filters-container').before(adFragment);
+};
+var onPinElementEscPress = (evt) => {
+  if (mapCardTemplate && evt.key === ESC_KEY) {
+    mapCardTemplate.remove();
+  }
+};
+
 var createAd = (ad) => {
-  var adElement = adTemplate.cloneNode(true);
+  var adElement = mapCardTemplate.cloneNode(true);
   adElement.querySelector('.popup__avatar').src = `${ad.author.avatar}`;
   adElement.querySelector('.popup__title').textContent = `${ad.offer.title}`;
   adElement.querySelector('.popup__text--address').textContent = `${ad.offer.address}`;
@@ -204,29 +211,65 @@ var renderPins = (pins) => {
 
 var map = document.querySelector('.map');
 var adForm = document.querySelector('.notice__form');
+var adFormFieldsets = document.querySelectorAll('.form__element');
+var mapFilterSelects = document.querySelectorAll('.map__filter');
+var mapFilterFieldset = document.querySelector('.map__filter-set');
 var inputAddress = document.querySelector('#address');
 var mapPinMain = document.querySelector('.map__pin--main');
+
 var MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
+
+
 
 var onMapPinMainActiveState = () => {
   map.classList.remove('map--faded');
   adForm.classList.remove('notice__form--disabled');
   document.querySelector('.map__pins').appendChild(renderPins(ads));
+  activateAdFields();
+  activateMapFilters();
   isPageActive = true;
 };
-
-var onMapPinMainDeactiveState = () => {
-  map.classList.add('map--faded');
-  adForm.classList.add('notice__form--disabled');
-  var pins = document.querySelectorAll('.map__pin');
+/**
+ * Remove all pins on map
+ */
+var removePins = () => {
+  var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   pins.forEach(pin => {
     if (!pin.classList.contains('map__pin--main')) {
       pin.remove();
     }
   });
-  [mapPinMain.offsetLeft, mapPinMain.offsetTop] = MAIN_PIN_START_LOCATION;
+};
+
+var activateMapFilters = () => {
+  mapFilterSelects.forEach(mapFilter => mapFilter.disabled = false);
+  mapFilterFieldset.disabled = false;
+};
+
+var deactivateMapFilters = () => {
+  mapFilterSelects.forEach(mapFilter => mapFilter.disabled = true);
+  mapFilterFieldset.disabled = true;
+};
+
+var activateAdFields = () => {
+  adFormFieldsets.forEach(fieldset => fieldset.disabled = false);
+};
+
+var deactivateAdFields = () => {
+  adFormFieldsets.forEach(fieldset => fieldset.disabled = true);
+};
+
+
+var onMapPinMainDeactivateState = () => {
+  map.classList.add('map--faded');
+  adForm.classList.add('notice__form--disabled');
+  [mapPinMain.style.left, mapPinMain.style.top] = MAIN_PIN_START_LOCATION;
+  removePins();
+  deactivateMapFilters();
+  deactivateAdFields();
   isPageActive = false;
 };
+
 
 var onMapPinMainWatchAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
