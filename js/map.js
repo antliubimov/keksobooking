@@ -160,6 +160,13 @@ var createPin = (pin) => {
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
 
+  var onPinElementClick = () => {
+    removeMapCard();
+    var adFragment = document.createDocumentFragment();
+    adFragment.appendChild(createAd(pin));
+    document.querySelector('.map__filters-container').before(adFragment);
+  };
+
   pinElement.addEventListener('click', onPinElementClick);
 
   return pinElement;
@@ -170,12 +177,6 @@ var removeMapCard = () => {
   if (mapCard) mapCard.remove();
 };
 
-var onPinElementClick = () => {
-  removeMapCard();
-  var adFragment = document.createDocumentFragment();
-  adFragment.appendChild(createAd(pin));
-  document.querySelector('.map__filters-container').before(adFragment);
-};
 /**
  * Create Ad from template
  * @param adData
@@ -345,7 +346,7 @@ mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
 
 
 /*
-* Validation
+* Validation of form
 * */
 var TITLE_LENGTH = {
   MIN: 30,
@@ -362,10 +363,36 @@ var houseTypeMinPrice = {
 
 
 var adFormTitle = document.querySelector('#title');
+var adFormAddress = document.querySelector('#address');
+var adFormHouseType = document.querySelector('#type');
+var adFormPrice = document.querySelector('#price');
+var adFormTimein = document.querySelector('#timein');
+var adFormTimeout = document.querySelector('#timeout');
+var adFormRoomNumber = document.querySelector('#room_number');
+var adFormCapacity = document.querySelector('#capacity');
+var adSubmitButton = document.querySelector('.form__submit');
+var adResetButton = document.querySelector('.form__reset');
+
+
 var onAdFormTitleInput = (evt) => {
   var title = evt.target.value;
-  if (title.length < TITLE_LENGTH.MIN || title.length > TITLE_LENGTH.MAX) {
+  if (title.length < TITLE_LENGTH.MIN && title.length > TITLE_LENGTH.MAX) {
     adFormTitle.setCustomValidity('Заголовок объявление должен быть не менее 30 и не более 100 символов')
   }
 };
 adFormTitle.addEventListener('input', onAdFormTitleInput);
+
+var onAdFormPrice = () => {
+  var minPrice = houseTypeMinPrice[adFormHouseType.value];
+  if (adFormPrice.value < minPrice) {
+    adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
+  }
+};
+adFormPrice.addEventListener('change', onAdFormPrice);
+var onAdFormHouseTypeChange = (evt) => {
+  var minPrice = houseTypeMinPrice[evt.target.value];
+  if (adFormPrice.value < minPrice) {
+    adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
+  }
+};
+adFormHouseType.addEventListener('change', onAdFormHouseTypeChange);
