@@ -85,7 +85,11 @@ var getRandomKey = function (obj) {
 
 var avatarNums = shuffle([1,2,3,4,5,6,7,8]);
 var randomTitleNums = shuffle([0,1,2,3,4,5,6,7]);
-
+/**
+ * Create random array from array
+ * @param features
+ * @returns {[]}
+ */
 var randomFeatures = (features) => {
   var length = getRandomNumber(0, features.length);
   var arrNums = getRandomArray(0, length - 1);
@@ -95,7 +99,10 @@ var randomFeatures = (features) => {
   }
   return  featuresArr;
 };
-
+/**
+ * Create array of ads
+ * @returns {[]}
+ */
 var createAds = () => {
   var adsArr = [];
 
@@ -137,8 +144,13 @@ var ads = createAds();
 
 var template = document.querySelector('template');
 var pinTemplate = template.content.querySelector('.map__pin');
-var mapCardTemplate = document.querySelector('.map__card');
+var mapCardTemplate = template.content.querySelector('.map__card');
 
+/**
+ * Create pin-element
+ * @param pin
+ * @returns {Node}
+ */
 var createPin = (pin) => {
   var pinElement = pinTemplate.cloneNode(true);
   var pinImg = pinElement.querySelector('img');
@@ -149,42 +161,71 @@ var createPin = (pin) => {
   pinImg.alt = `${pin.offer.title}`;
 
   pinElement.addEventListener('click', onPinElementClick);
-  pinElement.addEventListener('keydown', onPinElementEscPress);
 
   return pinElement;
 };
 
+var removeMapCard = () => {
+  var mapCard = document.querySelector('.map__card');
+  if (mapCard) mapCard.remove();
+};
 
 var onPinElementClick = () => {
-  if (mapCardTemplate) mapCardTemplate.remove();
+  removeMapCard();
   var adFragment = document.createDocumentFragment();
   adFragment.appendChild(createAd(pin));
   document.querySelector('.map__filters-container').before(adFragment);
 };
-var onPinElementEscPress = (evt) => {
-  if (mapCardTemplate && evt.key === ESC_KEY) {
-    mapCardTemplate.remove();
-  }
-};
-
-var createAd = (ad) => {
+/**
+ * Create Ad from template
+ * @param adData
+ * @returns {Node}
+ */
+var createAd = (adData) => {
   var adElement = mapCardTemplate.cloneNode(true);
-  adElement.querySelector('.popup__avatar').src = `${ad.author.avatar}`;
-  adElement.querySelector('.popup__title').textContent = `${ad.offer.title}`;
-  adElement.querySelector('.popup__text--address').textContent = `${ad.offer.address}`;
-  adElement.querySelector('.popup__price').textContent = `${ad.offer.price}₽/ночь`;
-  adElement.querySelector('.popup__type').textContent = `${ad.offer.type}`;
-  adElement.querySelector('.popup__text--capacity').textContent = `${ad.offer.rooms} комнаты для ${ad.offer.guests} гостей`;
-  adElement.querySelector('.popup__text--time').textContent = `Заезд послу ${ad.offer.checkin}, выезд до ${ad.offer.checkout}`;
-  var featuresList = [...adElement.querySelector('.popup__features').children];
-  for (var featureLi of featuresList) {
-    if (!ad.offer.features.includes(featureLi.classList[1].replace(/feature--/, ''))) {
-      featureLi.style.display = 'none';
+
+  adElement.querySelector('.popup__avatar').src = `${adData.author.avatar}`;
+  adElement.querySelector('.popup__title').textContent = `${adData.offer.title}`;
+  adElement.querySelector('.popup__text--address').textContent = `${adData.offer.address}`;
+  adElement.querySelector('.popup__price').textContent = `${adData.offer.price}₽/ночь`;
+  adElement.querySelector('.popup__type').textContent = `${adData.offer.type}`;
+  adElement.querySelector('.popup__text--capacity').textContent = `${adData.offer.rooms} комнаты для ${adData.offer.guests} гостей`;
+  adElement.querySelector('.popup__text--time').textContent = `Заезд послу ${adData.offer.checkin}, выезд до ${adData.offer.checkout}`;
+  adElement.querySelector('.popup__description').textContent = `${adData.offer.description}`;
+
+  createFeaturesFragment(adElement, adData);
+  createAdPhotos(adElement, adData);
+
+  var adCloseButton = adElement.querySelector('.popup__close');
+
+  var closeAd = () => {
+    adElement.remove();
+    adCloseButton.removeEventListener('click', onAdCloseClick);
+    document.removeEventListener('keydown', onAdElementEscPress);
+  };
+
+  var onAdCloseClick = () => closeAd();
+
+  var onAdElementEscPress = (evt) => {
+    if (evt.key === ESC_KEY) {
+      closeAd();
     }
-  }
-  adElement.querySelector('.popup__description').textContent = `${ad.offer.description}`;
+  };
+
+  adCloseButton.addEventListener('click', onAdCloseClick);
+  document.addEventListener('keydown', onAdElementEscPress);
+
+  return adElement;
+};
+/**
+ * Create ad's photos gallery
+ * @param adElement
+ * @param adData
+ */
+var createAdPhotos = (adElement, adData) => {
   var photos = adElement.querySelector('.popup__pictures');
-  ad.offer.photos.forEach(photo => {
+
+  adData.offer.photos.forEach(photo => {
     var li = document.createElement('li');
     var img = document.createElement('img');
     img.src = photo;
@@ -194,15 +235,27 @@ var createAd = (ad) => {
     li.classList.add('popup__picture');
     photos.appendChild(li);
   });
-  var adClose = adElement.querySelector('.popup__close');
-  var onAdCloseClick = () => {
-    adElement.remove();
-  };
-  adClose.addEventListener('click', onAdCloseClick);
+};
+/**
+ * Create fragment of Features
+ * @param adElement
+ * @param adData
+ */
+var createFeaturesFragment = (adElement, adData) => {
+  var featuresList = [...adElement.querySelector('.popup__features').children];
 
-  return adElement;
+  for (var featureLi of featuresList) {
+    if (!adData.offer.features.includes(featureLi.classList[1].replace(/feature--/, ''))) {
+      featureLi.style.display = 'none';
+    }
+  }
 };
 
+/**
+ * Renders pins on the map
+ * @param pins
+ * @returns {DocumentFragment}
+ */
 var renderPins = (pins) => {
   var pinsFragment = document.createDocumentFragment();
   pins.forEach(pin => pinsFragment.appendChild(createPin(pin)));
@@ -220,7 +273,9 @@ var mapPinMain = document.querySelector('.map__pin--main');
 var MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
 
 
-
+/**
+ * Puts the card in an active state
+ */
 var onMapPinMainActiveState = () => {
   map.classList.remove('map--faded');
   adForm.classList.remove('notice__form--disabled');
@@ -259,7 +314,9 @@ var deactivateAdFields = () => {
   adFormFieldsets.forEach(fieldset => fieldset.disabled = true);
 };
 
-
+/**
+ * Puts the card in an inactive state
+ */
 var onMapPinMainDeactivateState = () => {
   map.classList.add('map--faded');
   adForm.classList.add('notice__form--disabled');
