@@ -386,13 +386,35 @@ var onAdFormPrice = () => {
   var minPrice = houseTypeMinPrice[adFormHouseType.value];
   if (adFormPrice.value < minPrice) {
     adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
+  } else if (adFormPrice.value > maxPrice) {
+    adFormPrice.setCustomValidity(`Цена за ночь не может быть больше ${maxPrice}`);
+  } else {
+    adFormPrice.setCustomValidity('');
   }
+
 };
 adFormPrice.addEventListener('change', onAdFormPrice);
+
 var onAdFormHouseTypeChange = (evt) => {
   var minPrice = houseTypeMinPrice[evt.target.value];
   if (adFormPrice.value < minPrice) {
     adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
+  } else {
+    adFormPrice.setCustomValidity('');
   }
 };
 adFormHouseType.addEventListener('change', onAdFormHouseTypeChange);
+
+var onAdFormTime = (evt) => {
+  console.log(evt.target);
+  var formTime = (evt.target === adFormTimein) ? adFormTimeout : adFormTimein;
+  var time = evt.target.value;
+  var options = [...formTime.options];
+  options.forEach(option => {
+    if (option.value === time) {
+      option.selected = true;
+    }
+  })
+};
+adFormTimein.addEventListener('change', onAdFormTime);
+adFormTimeout.addEventListener('change', onAdFormTime);
