@@ -409,7 +409,7 @@ var formResetButton = document.querySelector('.form__reset');
  * Change on title of ad-form
  * @param evt
  */
-var onAdFormTitleInput = evt => {
+var onFormTitleInput = evt => {
   var title = evt.target.value;
   if (title.length < TITLE_LENGTH.MIN && title.length > TITLE_LENGTH.MAX) {
     formTitle.setCustomValidity(
@@ -417,12 +417,12 @@ var onAdFormTitleInput = evt => {
     );
   }
 };
-formTitle.addEventListener('change', onAdFormTitleInput);
+formTitle.addEventListener('change', onFormTitleInput);
 /**
  * Change on price of ad-form
  * @param evt
  */
-var onAdFormPriceChange = evt => {
+var onFormPriceChange = evt => {
   var minPrice = houseTypeMinPrice[formHouseType.value];
 
   if (evt.target.value < minPrice) {
@@ -440,23 +440,23 @@ var onAdFormPriceChange = evt => {
   }
 };
 
-formPrice.addEventListener('change', onAdFormPriceChange);
+formPrice.addEventListener('change', onFormPriceChange);
 /**
  * When change type of houses, then change min-price
  * @param evt
  */
-var onAdFormHouseTypeChange = evt => {
+var onFormHouseTypeChange = evt => {
   var minPrice = houseTypeMinPrice[evt.target.value];
   formPrice.min = minPrice;
   formPrice.placeholder = minPrice;
 };
-formHouseType.addEventListener('change', onAdFormHouseTypeChange);
+formHouseType.addEventListener('change', onFormHouseTypeChange);
 
 /**
  * Sync change adFormTimein and adFormTimeout
  * @param evt
  */
-var onAdFormTime = evt => {
+var onFormTime = evt => {
   var formTime = evt.target === formTimein ? formTimeout : formTimein;
   var time = evt.target.value;
   var options = [...formTime.options];
@@ -466,5 +466,5 @@ var onAdFormTime = evt => {
     }
   });
 };
-formTimein.addEventListener('change', onAdFormTime);
-formTimeout.addEventListener('change', onAdFormTime);
+formTimein.addEventListener('change', onFormTime);
+formTimeout.addEventListener('change', onFormTime);
