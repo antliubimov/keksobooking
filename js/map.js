@@ -394,69 +394,77 @@ var houseTypeMinPrice = {
   palace: 10000,
 };
 
-var adFormTitle = document.querySelector('#title');
-var adFormAddress = document.querySelector('#address');
-var adFormHouseType = document.querySelector('#type');
-var adFormPrice = document.querySelector('#price');
-var adFormTimein = document.querySelector('#timein');
-var adFormTimeout = document.querySelector('#timeout');
-var adFormRoomNumber = document.querySelector('#room_number');
-var adFormCapacity = document.querySelector('#capacity');
-var adSubmitButton = document.querySelector('.form__submit');
-var adResetButton = document.querySelector('.form__reset');
+var formTitle = document.querySelector('#title');
+var formAddress = document.querySelector('#address');
+var formHouseType = document.querySelector('#type');
+var formPrice = document.querySelector('#price');
+var formTimein = document.querySelector('#timein');
+var formTimeout = document.querySelector('#timeout');
+var formRoomNumber = document.querySelector('#room_number');
+var formCapacity = document.querySelector('#capacity');
+var formSubmitButton = document.querySelector('.form__submit');
+var formResetButton = document.querySelector('.form__reset');
 
+/**
+ * Change on title of ad-form
+ * @param evt
+ */
 var onAdFormTitleInput = evt => {
   var title = evt.target.value;
   if (title.length < TITLE_LENGTH.MIN && title.length > TITLE_LENGTH.MAX) {
-    adFormTitle.setCustomValidity(
+    formTitle.setCustomValidity(
       'Заголовок объявление должен быть не менее 30 и не более 100 символов',
     );
   }
 };
-adFormTitle.addEventListener('input', onAdFormTitleInput);
-
-var onAdFormPrice = (evt) => {
-  var minPrice = houseTypeMinPrice[adFormHouseType.value];
+formTitle.addEventListener('change', onAdFormTitleInput);
+/**
+ * Change on price of ad-form
+ * @param evt
+ */
+var onAdFormPriceChange = evt => {
+  var minPrice = houseTypeMinPrice[formHouseType.value];
 
   if (evt.target.value < minPrice) {
-    adFormPrice.setCustomValidity(`Для ${TYPE[adFormHouseType.value]} цена за ночь не может быть меньше ${minPrice}`);
+    formPrice.setCustomValidity(
+      `Для ${
+        TYPE[formHouseType.value]
+      } цена за ночь не может быть меньше ${minPrice}`,
+    );
   } else if (evt.target.value > maxPrice) {
-    adFormPrice.setCustomValidity(`Цена за ночь не может быть больше ${maxPrice}`);
+    formPrice.setCustomValidity(
+      `Цена за ночь не может быть больше ${maxPrice}`,
+    );
   } else {
-    adFormPrice.setCustomValidity('');
+    formPrice.setCustomValidity('');
   }
 };
 
-adFormPrice.addEventListener('change', onAdFormPrice);
-
-
-
-adFormPrice.addEventListener('input', onAdFormPrice);
-
-var onAdFormHouseTypeChange = (evt) => {
+formPrice.addEventListener('change', onAdFormPriceChange);
+/**
+ * When change type of houses, then change min-price
+ * @param evt
+ */
+var onAdFormHouseTypeChange = evt => {
   var minPrice = houseTypeMinPrice[evt.target.value];
-  if (adFormPrice.value < minPrice) {
-    adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
-  } else {
-    adFormPrice.setCustomValidity('');
-  }
+  formPrice.min = minPrice;
+  formPrice.placeholder = minPrice;
 };
-adFormHouseType.addEventListener('change', onAdFormHouseTypeChange);
+formHouseType.addEventListener('change', onAdFormHouseTypeChange);
 
 /**
  * Sync change adFormTimein and adFormTimeout
  * @param evt
  */
-var onAdFormTime = (evt) => {
-  var formTime = (evt.target === adFormTimein) ? adFormTimeout : adFormTimein;
+var onAdFormTime = evt => {
+  var formTime = evt.target === formTimein ? formTimeout : formTimein;
   var time = evt.target.value;
   var options = [...formTime.options];
   options.forEach(option => {
     if (option.value === time) {
       option.selected = true;
     }
-  })
+  });
 };
-adFormTimein.addEventListener('change', onAdFormTime);
-adFormTimeout.addEventListener('change', onAdFormTime);
-
+formTimein.addEventListener('change', onAdFormTime);
+formTimeout.addEventListener('change', onAdFormTime);
