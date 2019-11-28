@@ -415,35 +415,48 @@ var onAdFormTitleInput = evt => {
 };
 adFormTitle.addEventListener('input', onAdFormTitleInput);
 
-var onAdFormPrice = () => {
+var onAdFormPrice = (evt) => {
   var minPrice = houseTypeMinPrice[adFormHouseType.value];
-  if (adFormPrice.value <= minPrice) {
-    adFormPrice.setCustomValidity(
-      `Для ${
-        TYPE[adFormHouseType.value]
-      } цена за ночь не может быть меньше ${minPrice}`,
-    );
-  } else if (adFormPrice.value > maxPrice) {
-    adFormPrice.setCustomValidity(
-      `Максимильная цена не может быть больше ${maxPrice}`,
-    );
+
+  if (evt.target.value < minPrice) {
+    adFormPrice.setCustomValidity(`Для ${TYPE[adFormHouseType.value]} цена за ночь не может быть меньше ${minPrice}`);
+  } else if (evt.target.value > maxPrice) {
+    adFormPrice.setCustomValidity(`Цена за ночь не может быть больше ${maxPrice}`);
   } else {
     adFormPrice.setCustomValidity('');
   }
 };
+
 adFormPrice.addEventListener('change', onAdFormPrice);
 
-var onAdFormHouseTypeChange = evt => {
-  console.log(evt.target.value);
+
+
+adFormPrice.addEventListener('input', onAdFormPrice);
+
+var onAdFormHouseTypeChange = (evt) => {
   var minPrice = houseTypeMinPrice[evt.target.value];
-  if (adFormPrice.value <= minPrice) {
-    adFormHouseType.setCustomValidity(
-      `Для ${
-        TYPE[adFormHouseType.value]
-      } цена за ночь не может быть меньше ${minPrice}`,
-    );
+  if (adFormPrice.value < minPrice) {
+    adFormPrice.setCustomValidity(`Для ${TYPE[evt.target.value]} цена за ночь не может быть меньше ${minPrice}`);
   } else {
-    adFormHouseType.setCustomValidity('');
+    adFormPrice.setCustomValidity('');
   }
 };
 adFormHouseType.addEventListener('change', onAdFormHouseTypeChange);
+
+/**
+ * Sync change adFormTimein and adFormTimeout
+ * @param evt
+ */
+var onAdFormTime = (evt) => {
+  var formTime = (evt.target === adFormTimein) ? adFormTimeout : adFormTimein;
+  var time = evt.target.value;
+  var options = [...formTime.options];
+  options.forEach(option => {
+    if (option.value === time) {
+      option.selected = true;
+    }
+  })
+};
+adFormTimein.addEventListener('change', onAdFormTime);
+adFormTimeout.addEventListener('change', onAdFormTime);
+
