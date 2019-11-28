@@ -13,7 +13,9 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-plugin-jsx-a11y": "^6.2.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
