@@ -399,8 +399,8 @@ const formTitle = document.querySelector('#title');
 const formAddress = document.querySelector('#address');
 const formHouseType = document.querySelector('#type');
 const formPrice = document.querySelector('#price');
-const formTimein = document.querySelector('#timein');
-const formTimeout = document.querySelector('#timeout');
+const formTimeIn = document.querySelector('#timein');
+const formTimeOut = document.querySelector('#timeout');
 const formRoomNumber = document.querySelector('#room_number');
 const formCapacity = document.querySelector('#capacity');
 const formSubmitButton = document.querySelector('.form__submit');
@@ -454,11 +454,11 @@ const onFormHouseTypeChange = evt => {
 formHouseType.addEventListener('change', onFormHouseTypeChange);
 
 /**
- * Sync change adFormTimein and adFormTimeout
+ * Sync change formTimein and adFormTimeout
  * @param evt
  */
 const onFormTime = evt => {
-  const formTime = evt.target === formTimein ? formTimeout : formTimein;
+  const formTime = evt.target === formTimeIn ? formTimeOut : formTimeIn;
   const time = evt.target.value;
   const options = [...formTime.options];
   options.forEach(option => {
@@ -468,10 +468,23 @@ const onFormTime = evt => {
     }
   });
 };
-formTimein.addEventListener('change', onFormTime);
-formTimeout.addEventListener('change', onFormTime);
+formTimeIn.addEventListener('change', onFormTime);
+formTimeOut.addEventListener('change', onFormTime);
 
 const onFormRoomNumber = () => {
+  const rooms = formRoomNumber.value;
+  const guests = formCapacity.value;
 
+  if (rooms === '100' && guests !== '0') {
+    formRoomNumber.setCustomValidity(`При выборе 100 комнат можно выбрать только вариант "не для гостей"`)
+  } else if (rooms !== '100' && guests === '0') {
+    formRoomNumber.setCustomValidity(`Для ${rooms} ${rooms === '1' ? 'комнаты' : 'комнат'} не может быть количество мест "не для гостей"`);
+  } else if (rooms < guests) {
+    formRoomNumber.setCustomValidity(`Количество комнат должно быть больше или равно количеству гостей`);
+  } else {
+    formRoomNumber.setCustomValidity(``);
+  }
 };
-formRoomNumber.addEventListener('change', onFormRoomNumber);
+
+formSubmitButton.addEventListener('click', onFormRoomNumber);
+
