@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 let isPageActive = false;
 const ESC_KEY = 'Escape';
@@ -100,7 +100,7 @@ const shuffle = a => {
  * @param obj
  * @returns {string}
  */
-const getRandomKey = (obj) => {
+const getRandomKey = obj => {
   const keys = Object.keys(obj);
   return keys[getRandomNumber(0, keys.length - 1)];
 };
@@ -150,8 +150,8 @@ const createAds = () => {
         photos: shuffle(PHOTOS),
       },
       location: {
-         x,
-         y,
+        x,
+        y,
       },
     };
 
@@ -276,18 +276,19 @@ const createAdPhotos = (adElement, adData) => {
  * @param adData
  */
 const createFeaturesFragment = (adElement, adData) => {
-  const featuresList = [...adElement.querySelector('.popup__features').children];
+  const featuresList = [
+    ...adElement.querySelector('.popup__features').children,
+  ];
 
   featuresList.forEach(featureItem => {
-      if (
-        !adData.offer.features.includes(
-          featureItem.classList[1].replace(/feature--/, ''),
-        )
-      ) {
-        featureItem.style.display = 'none';
-      }
+    if (
+      !adData.offer.features.includes(
+        featureItem.classList[1].replace(/feature--/, ''),
+      )
+    ) {
+      featureItem.style.display = 'none';
     }
-  );
+  });
 };
 
 /**
@@ -384,6 +385,7 @@ const onMapPinMainMouseUp = () => {
   } else {
     onMapPinMainActiveState();
     onMapPinMainWatchAddress();
+    activateFormListeners();
   }
 };
 
@@ -430,7 +432,7 @@ const onFormTitleInput = evt => {
     formTitle.setCustomValidity('');
   }
 };
-formTitle.addEventListener('input', onFormTitleInput);
+
 /**
  * Change on price of ad-form
  * @param evt
@@ -455,7 +457,6 @@ const onFormPriceChange = evt => {
   }
 };
 
-formPrice.addEventListener('change', onFormPriceChange);
 /**
  * When change type of houses, then change min-price
  * @param evt
@@ -465,7 +466,6 @@ const onFormHouseTypeChange = evt => {
   formPrice.min = minPrice;
   formPrice.placeholder = minPrice;
 };
-formHouseType.addEventListener('change', onFormHouseTypeChange);
 
 /**
  * Sync change formTimeIn and adFormTimeout
@@ -482,8 +482,7 @@ const onFormTime = evt => {
     }
   });
 };
-formTimeIn.addEventListener('change', onFormTime);
-formTimeOut.addEventListener('change', onFormTime);
+
 /**
  * Monitored compliance number of rooms and number of guests
  */
@@ -492,16 +491,40 @@ const onFormRoomNumber = () => {
   const guests = formCapacity.value;
 
   if (rooms === '100' && guests !== '0') {
-    formRoomNumber.setCustomValidity(`При выборе 100 комнат можно выбрать только вариант "не для гостей"`)
+    formRoomNumber.setCustomValidity(
+      `При выборе 100 комнат можно выбрать только вариант "не для гостей"`,
+    );
   } else if (rooms !== '100' && guests === '0') {
-    formRoomNumber.setCustomValidity(`Для ${rooms} ${rooms === '1' ? 'комнаты' : 'комнат'} не может быть количество мест "не для гостей"`);
+    formRoomNumber.setCustomValidity(
+      `Для ${rooms} ${
+        rooms === '1' ? 'комнаты' : 'комнат'
+      } не может быть количество мест "не для гостей"`,
+    );
   } else if (rooms < guests) {
-    formRoomNumber.setCustomValidity(`Количество комнат должно быть больше или равно количеству гостей`);
+    formRoomNumber.setCustomValidity(
+      `Количество комнат должно быть больше или равно количеству гостей`,
+    );
   } else {
     formRoomNumber.setCustomValidity(``);
   }
 };
- formSubmitButton.addEventListener('click', onFormRoomNumber);
+/**
+ * Deactivate form when click on reset-button
+ */
+const onFormResetButton = () => {
+  removeFormListeners();
+  deactivateState();
+};
+
+const activateFormListeners = () => {
+  formTitle.addEventListener('input', onFormTitleInput);
+  formPrice.addEventListener('change', onFormPriceChange);
+  formHouseType.addEventListener('change', onFormHouseTypeChange);
+  formTimeIn.addEventListener('change', onFormTime);
+  formTimeOut.addEventListener('change', onFormTime);
+  formSubmitButton.addEventListener('click', onFormRoomNumber);
+  formResetButton.addEventListener('click', onFormResetButton);
+};
 
 const removeFormListeners = () => {
   formTitle.removeEventListener('input', onFormTitleInput);
@@ -513,8 +536,4 @@ const removeFormListeners = () => {
   formResetButton.removeEventListener('click', onFormResetButton);
 };
 
-const onFormResetButton = () => {
-  removeFormListeners();
-  deactivateState();
-};
-formResetButton.addEventListener('click', onFormResetButton);
+
