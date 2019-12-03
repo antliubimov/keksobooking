@@ -361,11 +361,12 @@ const deactivateAdFields = () => {
 };
 
 /**
- * Puts the card in an inactive state
+ * Deactivate the card in an inactive state
  */
-const onMapPinMainDeactivateState = () => {
+const deactivateState = () => {
   map.classList.add('map--faded');
   adForm.classList.add('notice__form--disabled');
+  adForm.reset();
   [mapPinMain.style.left, mapPinMain.style.top] = MAIN_PIN_START_LOCATION;
   removePins();
   deactivateMapFilters();
@@ -502,3 +503,18 @@ const onFormRoomNumber = () => {
 };
  formSubmitButton.addEventListener('click', onFormRoomNumber);
 
+const removeFormListeners = () => {
+  formTitle.removeEventListener('input', onFormTitleInput);
+  formPrice.removeEventListener('change', onFormPriceChange);
+  formHouseType.removeEventListener('change', onFormHouseTypeChange);
+  formTimeIn.removeEventListener('change', onFormTime);
+  formTimeOut.removeEventListener('change', onFormTime);
+  formSubmitButton.removeEventListener('click', onFormRoomNumber);
+  formResetButton.removeEventListener('click', onFormResetButton);
+};
+
+const onFormResetButton = () => {
+  removeFormListeners();
+  deactivateState();
+};
+formResetButton.addEventListener('click', onFormResetButton);
