@@ -621,6 +621,10 @@ textarea:focus {
   color: #ff5635;
 }
 
+.notice__form input.input--invalid {
+  border: 2px solid red;
+}
+
 .form__photo-container {
   width: 140px;
 }
