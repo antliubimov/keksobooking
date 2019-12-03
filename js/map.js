@@ -422,6 +422,13 @@ const formCapacity = document.querySelector('#capacity');
 const formSubmitButton = document.querySelector('.form__submit');
 const formResetButton = document.querySelector('.form__reset');
 
+const highlightInvalidInput = (formInput) => {
+  formInput.classList.add('input--invalid');
+};
+const unhighlightInvalidInput = (formInput) => {
+  formInput.classList.remove('input--invalid');
+};
+
 /**
  * Change on title of ad-form
  * @param evt
@@ -432,8 +439,10 @@ const onFormTitleInput = evt => {
     formTitle.setCustomValidity(
       'Заголовок объявление должен быть не менее 30 и не более 100 символов',
     );
+    highlightInvalidInput(formTitle);
   } else {
     formTitle.setCustomValidity('');
+    unhighlightInvalidInput(formTitle);
   }
 };
 
