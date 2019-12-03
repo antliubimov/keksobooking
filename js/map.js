@@ -172,18 +172,18 @@ const mapCardTemplate = template.content.querySelector('.map__card');
  * @param pin
  * @returns {Node}
  */
-var createPin = pin => {
-  var pinElement = pinTemplate.cloneNode(true);
-  var pinImg = pinElement.querySelector('img');
+const createPin = pin => {
+  const pinElement = pinTemplate.cloneNode(true);
+  const pinImg = pinElement.querySelector('img');
 
   pinElement.style.left = `${pin.location.x - PIN_SIZE.WIDTH / 2}px`;
   pinElement.style.top = `${pin.location.y - PIN_SIZE.HEIGHT}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
 
-  var onPinElementClick = () => {
+  const onPinElementClick = () => {
     removeMapCard();
-    var adFragment = document.createDocumentFragment();
+    const adFragment = document.createDocumentFragment();
     adFragment.appendChild(createAd(pin));
     document.querySelector('.map__filters-container').before(adFragment);
   };
@@ -203,8 +203,8 @@ const removeMapCard = () => {
  * @param adData
  * @returns {Node}
  */
-var createAd = adData => {
-  var adElement = mapCardTemplate.cloneNode(true);
+const createAd = adData => {
+  const adElement = mapCardTemplate.cloneNode(true);
 
   adElement.querySelector('.popup__avatar').src = `${adData.author.avatar}`;
   adElement.querySelector(
@@ -230,17 +230,17 @@ var createAd = adData => {
   createFeaturesFragment(adElement, adData);
   createAdPhotos(adElement, adData);
 
-  var adCloseButton = adElement.querySelector('.popup__close');
+  const adCloseButton = adElement.querySelector('.popup__close');
 
-  var closeAd = () => {
+  const closeAd = () => {
     adElement.remove();
     adCloseButton.removeEventListener('click', onAdCloseClick);
     document.removeEventListener('keydown', onAdElementEscPress);
   };
 
-  var onAdCloseClick = () => closeAd();
+  const onAdCloseClick = () => closeAd();
 
-  var onAdElementEscPress = evt => {
+  const onAdElementEscPress = evt => {
     if (evt.key === ESC_KEY) {
       closeAd();
     }
@@ -256,7 +256,7 @@ var createAd = adData => {
  * @param adElement
  * @param adData
  */
-var createAdPhotos = (adElement, adData) => {
+const createAdPhotos = (adElement, adData) => {
   const photos = adElement.querySelector('.popup__pictures');
 
   adData.offer.photos.forEach(photo => {
@@ -275,18 +275,19 @@ var createAdPhotos = (adElement, adData) => {
  * @param adElement
  * @param adData
  */
-var createFeaturesFragment = (adElement, adData) => {
-  var featuresList = [...adElement.querySelector('.popup__features').children];
+const createFeaturesFragment = (adElement, adData) => {
+  const featuresList = [...adElement.querySelector('.popup__features').children];
 
-  for (var featureLi of featuresList) {
-    if (
-      !adData.offer.features.includes(
-        featureLi.classList[1].replace(/feature--/, ''),
-      )
-    ) {
-      featureLi.style.display = 'none';
+  featuresList.forEach(featureItem => {
+      if (
+        !adData.offer.features.includes(
+          featureItem.classList[1].replace(/feature--/, ''),
+        )
+      ) {
+        featureItem.style.display = 'none';
+      }
     }
-  }
+  );
 };
 
 /**
@@ -295,14 +296,14 @@ var createFeaturesFragment = (adElement, adData) => {
  * @returns {DocumentFragment}
  */
 const renderPins = pins => {
-  let pinsFragment = document.createDocumentFragment();
+  const pinsFragment = document.createDocumentFragment();
   pins.forEach(pin => pinsFragment.appendChild(createPin(pin)));
   return pinsFragment;
 };
 
 const map = document.querySelector('.map');
 const adForm = document.querySelector('.notice__form');
-const adFormFieldsets = document.querySelectorAll('.form__element');
+const formFieldSets = document.querySelectorAll('.form__element');
 const mapFilterSelects = document.querySelectorAll('.map__filter');
 const mapFilterFieldset = document.querySelector('.map__filter-set');
 const inputAddress = document.querySelector('#address');
@@ -313,7 +314,7 @@ const MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
 /**
  * Puts the card in an active state
  */
-var onMapPinMainActiveState = () => {
+const onMapPinMainActiveState = () => {
   map.classList.remove('map--faded');
   adForm.classList.remove('notice__form--disabled');
   document.querySelector('.map__pins').appendChild(renderPins(ads));
@@ -324,37 +325,45 @@ var onMapPinMainActiveState = () => {
 /**
  * Remove all pins on map
  */
-var removePins = () => {
-  var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+const removePins = () => {
+  const pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   pins.forEach(pin => {
     if (!pin.classList.contains('map__pin--main')) {
       pin.remove();
     }
   });
 };
-
-var activateMapFilters = () => {
+/**
+ * Activate filters of map
+ */
+const activateMapFilters = () => {
   mapFilterSelects.forEach(mapFilter => (mapFilter.disabled = false));
   mapFilterFieldset.disabled = false;
 };
-
-var deactivateMapFilters = () => {
+/**
+ * Deactivate filters of map
+ */
+const deactivateMapFilters = () => {
   mapFilterSelects.forEach(mapFilter => (mapFilter.disabled = true));
   mapFilterFieldset.disabled = true;
 };
-
-var activateAdFields = () => {
-  adFormFieldsets.forEach(fieldset => (fieldset.disabled = false));
+/**
+ * Activate fields of ad-form
+ */
+const activateAdFields = () => {
+  formFieldSets.forEach(fieldset => (fieldset.disabled = false));
 };
-
-var deactivateAdFields = () => {
-  adFormFieldsets.forEach(fieldset => (fieldset.disabled = true));
+/**
+ * Deactivate fields of ad-form
+ */
+const deactivateAdFields = () => {
+  formFieldSets.forEach(fieldset => (fieldset.disabled = true));
 };
 
 /**
  * Puts the card in an inactive state
  */
-var onMapPinMainDeactivateState = () => {
+const onMapPinMainDeactivateState = () => {
   map.classList.add('map--faded');
   adForm.classList.add('notice__form--disabled');
   [mapPinMain.style.left, mapPinMain.style.top] = MAIN_PIN_START_LOCATION;
@@ -364,11 +373,11 @@ var onMapPinMainDeactivateState = () => {
   isPageActive = false;
 };
 
-var onMapPinMainWatchAddress = () => {
+const onMapPinMainWatchAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
 };
 
-var onMapPinMainMouseUp = () => {
+const onMapPinMainMouseUp = () => {
   if (isPageActive) {
     onMapPinMainWatchAddress();
   } else {
@@ -412,19 +421,23 @@ const formResetButton = document.querySelector('.form__reset');
  */
 const onFormTitleInput = evt => {
   const title = evt.target.value;
-  if (title.length < TITLE_LENGTH.MIN && title.length > TITLE_LENGTH.MAX) {
+  if (title.length <= TITLE_LENGTH.MIN || title.length >= TITLE_LENGTH.MAX) {
     formTitle.setCustomValidity(
       'Заголовок объявление должен быть не менее 30 и не более 100 символов',
     );
+  } else {
+    formTitle.setCustomValidity('');
   }
 };
-formTitle.addEventListener('change', onFormTitleInput);
+formTitle.addEventListener('input', onFormTitleInput);
 /**
  * Change on price of ad-form
  * @param evt
  */
 const onFormPriceChange = evt => {
   const minPrice = houseTypeMinPrice[formHouseType.value];
+  formPrice.min = minPrice;
+  formPrice.placeholder = minPrice;
 
   if (evt.target.value < minPrice) {
     formPrice.setCustomValidity(
@@ -454,7 +467,7 @@ const onFormHouseTypeChange = evt => {
 formHouseType.addEventListener('change', onFormHouseTypeChange);
 
 /**
- * Sync change formTimein and adFormTimeout
+ * Sync change formTimeIn and adFormTimeout
  * @param evt
  */
 const onFormTime = evt => {
@@ -470,7 +483,9 @@ const onFormTime = evt => {
 };
 formTimeIn.addEventListener('change', onFormTime);
 formTimeOut.addEventListener('change', onFormTime);
-
+/**
+ * Monitored compliance number of rooms and number of guests
+ */
 const onFormRoomNumber = () => {
   const rooms = formRoomNumber.value;
   const guests = formCapacity.value;
@@ -485,6 +500,5 @@ const onFormRoomNumber = () => {
     formRoomNumber.setCustomValidity(``);
   }
 };
-
-formSubmitButton.addEventListener('click', onFormRoomNumber);
+ formSubmitButton.addEventListener('click', onFormRoomNumber);
 
