@@ -406,6 +406,10 @@ const houseTypeMinPrice = {
   house: 5000,
   palace: 10000,
 };
+const forEvent = {
+  rooms: '100',
+  guests: '0',
+};
 
 const formTitle = document.querySelector('#title');
 const formAddress = document.querySelector('#address');
@@ -490,11 +494,11 @@ const onFormRoomNumber = () => {
   const rooms = formRoomNumber.value;
   const guests = formCapacity.value;
 
-  if (rooms === '100' && guests !== '0') {
+  if (rooms === forEvent.rooms && guests !== forEvent.guests) {
     formRoomNumber.setCustomValidity(
       `При выборе 100 комнат можно выбрать только вариант "не для гостей"`,
     );
-  } else if (rooms !== '100' && guests === '0') {
+  } else if (rooms !== forEvent.rooms && guests === forEvent.guests) {
     formRoomNumber.setCustomValidity(
       `Для ${rooms} ${
         rooms === '1' ? 'комнаты' : 'комнат'
