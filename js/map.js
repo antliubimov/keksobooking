@@ -421,7 +421,6 @@ const formRoomNumber = document.querySelector('#room_number');
 const formCapacity = document.querySelector('#capacity');
 const formSubmitButton = document.querySelector('.form__submit');
 const formResetButton = document.querySelector('.form__reset');
-let invalidElements = [];
 
 const highlightInvalidInput = (formInput) => {
   formInput.classList.add('input--invalid');
@@ -431,12 +430,19 @@ const unhighlightInvalidInput = (formInput) => {
     formInput.classList.remove('input--invalid');
   }
 };
-
-const onElementCheckValidity = evt => {
-  if (!evt.target.checkValidity()) {
-    highlightInvalidInput(evt.target);
-  } else if (invalidElements.indexOf(evt.target) !== 1) {
-    unhighlightInvalidInput(evt.target);
+/**
+ * Toggle highlight on invalid element
+ * @param evt event
+ * @param element Node
+ * @param min number
+ * @param max number
+ */
+const toggleLightInvalidElement = (evt, element, min, max) => {
+  const {value} = evt.target;
+  if (value < min || value > max) {
+    highlightInvalidInput(element);
+  } else {
+    unhighlightInvalidInput(element);
   }
 };
 /**
@@ -444,12 +450,7 @@ const onElementCheckValidity = evt => {
  * @param evt
  */
 const onFormTitleInput = evt => {
-  const title = evt.target.value;
-  if (title.length <= TITLE_LENGTH.MIN || title.length >= TITLE_LENGTH.MAX) {
-    highlightInvalidInput(formTitle);
-  } else {
-    unhighlightInvalidInput(formTitle);
-  }
+  toggleLightInvalidElement(evt, formTitle, TITLE_LENGTH.MIN, TITLE_LENGTH.MAX);
 };
 /**
  * When change type of houses, then change min-price
@@ -466,12 +467,7 @@ const onFormHouseTypeChange = () => {
  */
 const onFormPriceChange = evt => {
   const minPrice = onFormHouseTypeChange();
-
-  if (evt.target.value < minPrice || evt.target.value > maxPrice) {
-    highlightInvalidInput(formPrice);
-  } else {
-    unhighlightInvalidInput(formPrice);
-  }
+  toggleLightInvalidElement(evt, formPrice, minPrice, maxPrice);
 };
 
 /**
@@ -494,18 +490,22 @@ const onFormRoomNumber = () => {
     formRoomNumber.setCustomValidity(
       `При выборе 100 комнат можно выбрать только вариант "не для гостей"`,
     );
+    highlightInvalidInput(formRoomNumber);
   } else if (rooms !== forEvent.rooms && guests === forEvent.guests) {
     formRoomNumber.setCustomValidity(
       `Для ${rooms} ${
         rooms === '1' ? 'комнаты' : 'комнат'
       } не может быть количество мест "не для гостей"`,
     );
+    highlightInvalidInput(formRoomNumber);
   } else if (rooms < guests) {
     formRoomNumber.setCustomValidity(
       `Количество комнат должно быть больше или равно количеству гостей`,
     );
+    highlightInvalidInput(formRoomNumber);
   } else {
     formRoomNumber.setCustomValidity(``);
+    unhighlightInvalidInput(formRoomNumber);
   }
 };
 /**
