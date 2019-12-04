@@ -390,16 +390,16 @@ const deactivateForm = () => {
 
 };
 
-const onMapPinMainWatchAddress = () => {
+const setAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
 };
 
 const onMapPinMainMouseUp = () => {
   if (isPageActive) {
-    onMapPinMainWatchAddress();
+    setAddress();
   } else {
     onMapPinMainActiveState();
-    onMapPinMainWatchAddress();
+    setAddress();
     activateFormListeners();
   }
 };
