@@ -312,15 +312,22 @@ const mapPinMain = document.querySelector('.map__pin--main');
 
 const MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
 
+const activateMap = () => {
+  map.classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(renderPins(ads));
+  activateMapFilters();
+};
+const activateForm = () => {
+  adForm.classList.remove('notice__form--disabled');
+  activateAdFields();
+};
+
 /**
  * Puts the card in an active state
  */
 const onMapPinMainActiveState = () => {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('notice__form--disabled');
-  document.querySelector('.map__pins').appendChild(renderPins(ads));
-  activateAdFields();
-  activateMapFilters();
+  activateMap();
+  activateForm();
   isPageActive = true;
 };
 /**
@@ -358,21 +365,29 @@ const activateAdFields = () => {
  * Deactivate fields of ad-form
  */
 const deactivateAdFields = () => {
-  formFieldSets.forEach(fieldset => (fieldset.disabled = true));
+  formFieldSets.forEach(fieldset => {
+    fieldset.disabled = true;
+    unhighlightInvalidInput(fieldset.elements[0]);
+  });
 };
 
 /**
  * Deactivate the card in an inactive state
  */
-const deactivateState = () => {
+const deactivateMap = () => {
   map.classList.add('map--faded');
-  adForm.classList.add('notice__form--disabled');
-  adForm.reset();
   [mapPinMain.style.left, mapPinMain.style.top] = MAIN_PIN_START_LOCATION;
   removePins();
   deactivateMapFilters();
+};
+
+const deactivateForm = () => {
+  adForm.reset();
+  adForm.classList.add('notice__form--disabled');
   deactivateAdFields();
-  isPageActive = false;
+//  window.loadImage.deactivate();
+//  window.loadImage.remove();
+
 };
 
 const onMapPinMainWatchAddress = () => {
@@ -511,9 +526,12 @@ const onFormRoomNumber = () => {
 /**
  * Deactivate form when click on reset-button
  */
-const onFormResetButton = () => {
+const onFormResetButton = (evt) => {
+  evt.preventDefault();
+  deactivateMap();
+  deactivateForm();
   removeFormListeners();
-  deactivateState();
+  isPageActive = false;
 };
 
 const activateFormListeners = () => {
