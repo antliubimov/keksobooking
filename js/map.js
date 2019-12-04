@@ -453,7 +453,7 @@ const onFormTitleInput = evt => {
 const onFormPriceChange = evt => {
   const minPrice = houseTypeMinPrice[formHouseType.value];
   formPrice.min = minPrice;
-  formPrice.placeholder = minPrice;
+  formPrice.placeholder = minPrice.toString();
 
   if (evt.target.value < minPrice) {
     formPrice.setCustomValidity(
@@ -477,7 +477,7 @@ const onFormPriceChange = evt => {
 const onFormHouseTypeChange = evt => {
   const minPrice = houseTypeMinPrice[evt.target.value];
   formPrice.min = minPrice;
-  formPrice.placeholder = minPrice;
+  formPrice.placeholder = minPrice.toString();
 };
 
 /**
@@ -486,14 +486,7 @@ const onFormHouseTypeChange = evt => {
  */
 const onFormTime = evt => {
   const formTime = evt.target === formTimeIn ? formTimeOut : formTimeIn;
-  const time = evt.target.value;
-  const options = [...formTime.options];
-  options.forEach(option => {
-    if (option.value === time) {
-      // eslint-disable-next-line no-param-reassign
-      option.selected = true;
-    }
-  });
+  formTime.value = evt.target.value;
 };
 
 /**
