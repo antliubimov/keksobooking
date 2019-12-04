@@ -421,14 +421,24 @@ const formRoomNumber = document.querySelector('#room_number');
 const formCapacity = document.querySelector('#capacity');
 const formSubmitButton = document.querySelector('.form__submit');
 const formResetButton = document.querySelector('.form__reset');
+let invalidElements = [];
 
 const highlightInvalidInput = (formInput) => {
   formInput.classList.add('input--invalid');
 };
 const unhighlightInvalidInput = (formInput) => {
-  formInput.classList.remove('input--invalid');
+  if (formInput.classList.contains('input--invalid')) {
+    formInput.classList.remove('input--invalid');
+  }
 };
 
+const onElementCheckValidity = evt => {
+  if (!evt.target.checkValidity()) {
+    highlightInvalidInput(evt.target);
+  } else if (invalidElements.indexOf(evt.target) !== 1) {
+    unhighlightInvalidInput(evt.target);
+  }
+};
 /**
  * Change on title of ad-form
  * @param evt
@@ -436,48 +446,32 @@ const unhighlightInvalidInput = (formInput) => {
 const onFormTitleInput = evt => {
   const title = evt.target.value;
   if (title.length <= TITLE_LENGTH.MIN || title.length >= TITLE_LENGTH.MAX) {
-    formTitle.setCustomValidity(
-      'Заголовок объявление должен быть не менее 30 и не более 100 символов',
-    );
     highlightInvalidInput(formTitle);
   } else {
-    formTitle.setCustomValidity('');
     unhighlightInvalidInput(formTitle);
   }
 };
-
+/**
+ * When change type of houses, then change min-price
+ */
+const onFormHouseTypeChange = () => {
+  const minPrice = houseTypeMinPrice[formHouseType.value];
+  formPrice.min = minPrice;
+  formPrice.placeholder = minPrice;
+  return minPrice;
+};
 /**
  * Change on price of ad-form
  * @param evt
  */
 const onFormPriceChange = evt => {
-  const minPrice = houseTypeMinPrice[formHouseType.value];
-  formPrice.min = minPrice;
-  formPrice.placeholder = minPrice.toString();
+  const minPrice = onFormHouseTypeChange();
 
-  if (evt.target.value < minPrice) {
-    formPrice.setCustomValidity(
-      `Для ${
-        TYPE[formHouseType.value]
-      } цена за ночь не может быть меньше ${minPrice}`,
-    );
-  } else if (evt.target.value > maxPrice) {
-    formPrice.setCustomValidity(
-      `Цена за ночь не может быть больше ${maxPrice}`,
-    );
+  if (evt.target.value < minPrice || evt.target.value > maxPrice) {
+    highlightInvalidInput(formPrice);
   } else {
-    formPrice.setCustomValidity('');
+    unhighlightInvalidInput(formPrice);
   }
-};
-
-/**
- * When change type of houses, then change min-price
- * @param evt
- */
-const onFormHouseTypeChange = evt => {
-  const minPrice = houseTypeMinPrice[evt.target.value];
-  formPrice.min = minPrice;
-  formPrice.placeholder = minPrice.toString();
 };
 
 /**
