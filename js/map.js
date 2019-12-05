@@ -4,12 +4,12 @@ let isPageActive = false;
 const ESC_KEY = 'Escape';
 const TAIL_HEIGHT = 16;
 const PIN_SIZE = {
-  WIDTH: 46,
-  HEIGHT: 62,
+  WIDTH: 44,
+  HEIGHT: 44,
 };
 const MAIN_PIN = {
-  WIDTH: 62,
-  HEIGHT: 84,
+  WIDTH: 65,
+  HEIGHT: 65,
 };
 
 const getLocation = element => {
@@ -177,7 +177,7 @@ const createPin = pin => {
   const pinImg = pinElement.querySelector('img');
 
   pinElement.style.left = `${pin.location.x - PIN_SIZE.WIDTH / 2}px`;
-  pinElement.style.top = `${pin.location.y - PIN_SIZE.HEIGHT}px`;
+  pinElement.style.top = `${pin.location.y - PIN_SIZE.HEIGHT - TAIL_HEIGHT}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
 
@@ -553,5 +553,55 @@ const removeFormListeners = () => {
   formSubmitButton.removeEventListener('click', onFormRoomNumber);
   formResetButton.removeEventListener('click', onFormResetButton);
 };
+
+
+// handle mapPinMain
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = (moveEvt) => {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
+    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+  };
+
+  var onMouseUp = (upEvt) => {
+    upEvt.preventDefault();
+
+    if (dragged) {
+      var onClickPreventDefault = function (evt) {
+        evt.preventDefault();
+        mapPinMain.removeEventListener('click', onClickPreventDefault)
+      };
+      mapPinMain.addEventListener('click', onClickPreventDefault);
+    }
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+});
+
 
 
