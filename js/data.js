@@ -54,8 +54,8 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   ];
 
-  const avatarNums = window.utils.window.utils.shuffle([1, 2, 3, 4, 5, 6, 7, 8]);
-  const randomTitleNums = window.utils.window.utils.shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
+  const avatarNums = window.utils.shuffle([1, 2, 3, 4, 5, 6, 7, 8]);
+  const randomTitleNums = window.utils.shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
 
   /**
    * Create array of ads
