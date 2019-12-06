@@ -13,7 +13,10 @@ const MAIN_PIN = {
 };
 
 const getLocation = element => {
-  return [element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2), element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT];
+  return [
+    element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2),
+    element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT,
+  ];
 };
 
 const DRAG_LIMIT = {
@@ -176,8 +179,12 @@ const createPin = pin => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinImg = pinElement.querySelector('img');
 
-  pinElement.style.left = `${Math.round(pin.location.x - PIN_SIZE.WIDTH / 2)}px`;
-  pinElement.style.top = `${Math.round(pin.location.y - PIN_SIZE.HEIGHT / 2 - TAIL_HEIGHT)}px`;
+  pinElement.style.left = `${Math.round(
+    pin.location.x - PIN_SIZE.WIDTH / 2,
+  )}px`;
+  pinElement.style.top = `${Math.round(
+    pin.location.y - PIN_SIZE.HEIGHT / 2 - TAIL_HEIGHT,
+  )}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
 
@@ -385,16 +392,13 @@ const deactivateForm = () => {
   adForm.reset();
   adForm.classList.add('notice__form--disabled');
   deactivateAdFields();
-//  window.loadImage.deactivate();
-//  window.loadImage.remove();
-
+  //  window.loadImage.deactivate();
+  //  window.loadImage.remove();
 };
 
 const setAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
 };
-
-
 
 /*
  * Validation of form
@@ -427,10 +431,10 @@ const formCapacity = document.querySelector('#capacity');
 const formSubmitButton = document.querySelector('.form__submit');
 const formResetButton = document.querySelector('.form__reset');
 
-const highlightInvalidInput = (formInput) => {
+const highlightInvalidInput = formInput => {
   formInput.classList.add('input--invalid');
 };
-const unhighlightInvalidInput = (formInput) => {
+const unhighlightInvalidInput = formInput => {
   if (formInput.classList.contains('input--invalid')) {
     formInput.classList.remove('input--invalid');
   }
@@ -443,7 +447,7 @@ const unhighlightInvalidInput = (formInput) => {
  * @param max number
  */
 const toggleLightInvalidElement = (evt, element, min, max) => {
-  const {value} = evt.target;
+  const { value } = evt.target;
   if (value < min || value > max) {
     highlightInvalidInput(element);
   } else {
@@ -516,7 +520,7 @@ const onFormRoomNumber = () => {
 /**
  * Deactivate form when click on reset-button
  */
-const onFormResetButton = (evt) => {
+const onFormResetButton = evt => {
   evt.preventDefault();
   deactivateMap();
   deactivateForm();
@@ -544,43 +548,42 @@ const removeFormListeners = () => {
   formResetButton.removeEventListener('click', onFormResetButton);
 };
 
-
 // handle mapPinMain
-const onMapPinMainMouseDown = (evt) => {
+const onMapPinMainMouseDown = evt => {
   evt.preventDefault();
 
   let startCoords = {
     x: evt.clientX,
-    y: evt.clientY
+    y: evt.clientY,
   };
 
   let dragged = false;
 
-  const onMouseMove = (moveEvt) => {
+  const onMouseMove = moveEvt => {
     moveEvt.preventDefault();
     dragged = true;
 
     const shift = {
       x: startCoords.x - moveEvt.clientX,
-      y: startCoords.y - moveEvt.clientY
+      y: startCoords.y - moveEvt.clientY,
     };
 
     startCoords = {
       x: moveEvt.clientX,
-      y: moveEvt.clientY
+      y: moveEvt.clientY,
     };
 
-    mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + 'px';
-    mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
+    mapPinMain.style.top = mapPinMain.offsetTop - shift.y + 'px';
+    mapPinMain.style.left = mapPinMain.offsetLeft - shift.x + 'px';
   };
 
-  const onMouseUp = (upEvt) => {
+  const onMouseUp = upEvt => {
     upEvt.preventDefault();
 
     if (dragged) {
-      const onClickPreventDefault = (evt) => {
+      const onClickPreventDefault = evt => {
         evt.preventDefault();
-        mapPinMain.removeEventListener('click', onClickPreventDefault)
+        mapPinMain.removeEventListener('click', onClickPreventDefault);
       };
       mapPinMain.addEventListener('click', onClickPreventDefault);
     }
@@ -602,5 +605,3 @@ const onMapPinMainMouseDown = (evt) => {
 };
 
 mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
-
-
