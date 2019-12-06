@@ -65,7 +65,7 @@
     return featuresArr;
   };
 
-  window.utils = {
+  return window.utils = {
     getRandomNumber,
     getRandomArray,
     shuffle,
