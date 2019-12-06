@@ -383,7 +383,8 @@ const deactivateAdFields = () => {
  */
 const deactivateMap = () => {
   map.classList.add('map--faded');
-  [mapPinMain.style.left, mapPinMain.style.top] = MAIN_PIN_START_LOCATION;
+  mapPinMain.style.left = `${MAIN_PIN_START_LOCATION[0] - Math.round(MAIN_PIN.WIDTH / 2)}px`;
+  mapPinMain.style.top = `${MAIN_PIN_START_LOCATION[1] - MAIN_PIN.HEIGHT - TAIL_HEIGHT}px`;
   removePins();
   deactivateMapFilters();
 };
