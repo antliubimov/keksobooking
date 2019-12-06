@@ -53,7 +53,10 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
   ];
-
+  const PRICE = {
+    MIN: 1000,
+    MAX: 1000000,
+  };
   const avatarNums = window.utils.shuffle([1, 2, 3, 4, 5, 6, 7, 8]);
   const randomTitleNums = window.utils.shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
 
@@ -75,7 +78,7 @@
         offer: {
           title: TITLE[randomTitleNums[i]],
           address: `${x}, ${y}`,
-          price: window.utils.getRandomNumber(1000, 1000000),
+          price: window.utils.getRandomNumber(PRICE.MIN, PRICE.MAX),
           type: TYPE[window.utils.getRandomKey(TYPE)],
           rooms: window.utils.getRandomNumber(1, 5),
           guests: window.utils.getRandomNumber(1, 10),
