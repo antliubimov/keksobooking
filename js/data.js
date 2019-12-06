@@ -102,7 +102,7 @@
 
   const ads = createAds();
 
-  window.data = {
+  return window.data = {
     PIN_SIZE,
     TAIL_HEIGHT,
     MAIN_PIN,
