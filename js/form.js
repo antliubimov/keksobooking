@@ -22,9 +22,11 @@
     guests: '0',
   };
 
+  const mapPinMain = document.querySelector('.map__pin--main');
   const adForm = document.querySelector('.notice__form');
   const formFieldSets = document.querySelectorAll('.form__element');
   const formTitle = document.querySelector('#title');
+  const formAddress = document.querySelector('#address');
   const formHouseType = document.querySelector('#type');
   const formPrice = document.querySelector('#price');
   const formTimeIn = document.querySelector('#timein');
@@ -34,6 +36,12 @@
   const formSubmitButton = document.querySelector('.form__submit');
   const formResetButton = document.querySelector('.form__reset');
 
+
+
+  const setAddress = () => {
+    formAddress.value = `${getLocation(mapPinMain).join(', ')}`;
+  };
+
   const highlightInvalidInput = formInput => {
     formInput.classList.add('input--invalid');
   };
@@ -42,6 +50,8 @@
       formInput.classList.remove('input--invalid');
     }
   };
+
+
   /**
    * Toggle highlight on invalid element
    * @param evt event

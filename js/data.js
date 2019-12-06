@@ -102,12 +102,20 @@
 
   const ads = createAds();
 
+  const getLocation = element => {
+    return [
+      element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2),
+      element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT,
+    ];
+  };
+
   return window.data = {
     PIN_SIZE,
     TAIL_HEIGHT,
     MAIN_PIN,
     DRAG_LIMIT,
     ads,
+    getLocation,
   };
 })();
 
