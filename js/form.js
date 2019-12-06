@@ -37,9 +37,8 @@
   const formResetButton = document.querySelector('.form__reset');
 
 
-
   const setAddress = () => {
-    formAddress.value = `${getLocation(mapPinMain).join(', ')}`;
+    formAddress.value = `${window.data.getLocation(mapPinMain).join(', ')}`;
   };
 
   const highlightInvalidInput = formInput => {
@@ -50,7 +49,6 @@
       formInput.classList.remove('input--invalid');
     }
   };
-
 
   /**
    * Toggle highlight on invalid element

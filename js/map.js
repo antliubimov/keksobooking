@@ -33,7 +33,7 @@
 
   const mapPinMain = document.querySelector('.map__pin--main');
 
-  const MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
+  const MAIN_PIN_START_LOCATION = window.data.getLocation(mapPinMain);
 
   /**
    * Activate filters of map
