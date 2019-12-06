@@ -13,7 +13,7 @@ const MAIN_PIN = {
 };
 
 const getLocation = element => {
-  return [element.offsetLeft, element.offsetTop];
+  return [element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2), element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT];
 };
 
 const DRAG_LIMIT = {
@@ -325,7 +325,7 @@ const activateForm = () => {
 /**
  * Puts the card in an active state
  */
-const onMapPinMainActiveState = () => {
+const mapActiveState = () => {
   activateMap();
   activateForm();
   isPageActive = true;
@@ -394,17 +394,7 @@ const setAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
 };
 
-const onMapPinMainMouseUp = () => {
-  if (isPageActive) {
-    setAddress();
-  } else {
-    onMapPinMainActiveState();
-    setAddress();
-    activateFormListeners();
-  }
-};
 
-mapPinMain.addEventListener('mouseup', onMapPinMainMouseUp);
 
 /*
  * Validation of form
@@ -556,8 +546,7 @@ const removeFormListeners = () => {
 
 
 // handle mapPinMain
-
-mapPinMain.addEventListener('mousedown', function (evt) {
+var onMapPinMainMouseDown = (evt) => {
   evt.preventDefault();
 
   var startCoords = {
@@ -595,13 +584,22 @@ mapPinMain.addEventListener('mousedown', function (evt) {
       mapPinMain.addEventListener('click', onClickPreventDefault);
     }
 
+    if (isPageActive) {
+      setAddress();
+    } else {
+      mapActiveState();
+      activateFormListeners();
+      setAddress();
+    }
+
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-});
+};
 
+mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 
 
