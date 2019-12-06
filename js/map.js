@@ -546,20 +546,21 @@ const removeFormListeners = () => {
 
 
 // handle mapPinMain
-var onMapPinMainMouseDown = (evt) => {
+const onMapPinMainMouseDown = (evt) => {
   evt.preventDefault();
 
-  var startCoords = {
+  let startCoords = {
     x: evt.clientX,
     y: evt.clientY
   };
 
-  var dragged = false;
+  let dragged = false;
 
-  var onMouseMove = (moveEvt) => {
+  const onMouseMove = (moveEvt) => {
     moveEvt.preventDefault();
+    dragged = true;
 
-    var shift = {
+    const shift = {
       x: startCoords.x - moveEvt.clientX,
       y: startCoords.y - moveEvt.clientY
     };
@@ -573,11 +574,11 @@ var onMapPinMainMouseDown = (evt) => {
     mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + 'px';
   };
 
-  var onMouseUp = (upEvt) => {
+  const onMouseUp = (upEvt) => {
     upEvt.preventDefault();
 
     if (dragged) {
-      var onClickPreventDefault = function (evt) {
+      const onClickPreventDefault = (evt) => {
         evt.preventDefault();
         mapPinMain.removeEventListener('click', onClickPreventDefault)
       };
