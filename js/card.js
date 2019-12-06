@@ -1,0 +1,2 @@
+// card.js
+'use strict';

@@ -1,0 +1,2 @@
+// pin.js
+'use strict';

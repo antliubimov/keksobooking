@@ -1,3 +1,4 @@
+// map.js
 'use strict';
 
 let isPageActive = false;
@@ -310,8 +311,6 @@ const renderPins = pins => {
 };
 
 const map = document.querySelector('.map');
-const adForm = document.querySelector('.notice__form');
-const formFieldSets = document.querySelectorAll('.form__element');
 const mapFilterSelects = document.querySelectorAll('.map__filter');
 const mapFilterFieldset = document.querySelector('.map__filter-set');
 const inputAddress = document.querySelector('#address');
@@ -319,24 +318,6 @@ const mapPinMain = document.querySelector('.map__pin--main');
 
 const MAIN_PIN_START_LOCATION = getLocation(mapPinMain);
 
-const activateMap = () => {
-  map.classList.remove('map--faded');
-  document.querySelector('.map__pins').appendChild(renderPins(ads));
-  activateMapFilters();
-};
-const activateForm = () => {
-  adForm.classList.remove('notice__form--disabled');
-  activateAdFields();
-};
-
-/**
- * Puts the card in an active state
- */
-const mapActiveState = () => {
-  activateMap();
-  activateForm();
-  isPageActive = true;
-};
 /**
  * Remove all pins on map
  */
@@ -356,30 +337,33 @@ const activateMapFilters = () => {
   mapFilterFieldset.disabled = false;
 };
 /**
+ * Activate a map
+ */
+const activateMap = () => {
+  map.classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(renderPins(ads));
+  activateMapFilters();
+};
+
+/**
+ * Puts the window in an active state
+ */
+const activeState = () => {
+  activateMap();
+  window.form.activateForm();
+  isPageActive = true;
+};
+
+/**
  * Deactivate filters of map
  */
 const deactivateMapFilters = () => {
   mapFilterSelects.forEach(mapFilter => (mapFilter.disabled = true));
   mapFilterFieldset.disabled = true;
 };
-/**
- * Activate fields of ad-form
- */
-const activateAdFields = () => {
-  formFieldSets.forEach(fieldset => (fieldset.disabled = false));
-};
-/**
- * Deactivate fields of ad-form
- */
-const deactivateAdFields = () => {
-  formFieldSets.forEach(fieldset => {
-    fieldset.disabled = true;
-    unhighlightInvalidInput(fieldset.elements[0]);
-  });
-};
 
 /**
- * Deactivate the card in an inactive state
+ * Deactivate a map in an inactive state
  */
 const deactivateMap = () => {
   map.classList.add('map--faded');
@@ -389,165 +373,12 @@ const deactivateMap = () => {
   deactivateMapFilters();
 };
 
-const deactivateForm = () => {
-  adForm.reset();
-  adForm.classList.add('notice__form--disabled');
-  deactivateAdFields();
-  //  window.loadImage.deactivate();
-  //  window.loadImage.remove();
-};
+
 
 const setAddress = () => {
   inputAddress.value = `${getLocation(mapPinMain).join(', ')}`;
 };
 
-/*
- * Validation of form
- * */
-const TITLE_LENGTH = {
-  MIN: 30,
-  MAX: 100,
-};
-
-const maxPrice = 1000000;
-const houseTypeMinPrice = {
-  bungalow: 0,
-  flat: 1000,
-  house: 5000,
-  palace: 10000,
-};
-const forEvent = {
-  rooms: '100',
-  guests: '0',
-};
-
-const formTitle = document.querySelector('#title');
-const formAddress = document.querySelector('#address');
-const formHouseType = document.querySelector('#type');
-const formPrice = document.querySelector('#price');
-const formTimeIn = document.querySelector('#timein');
-const formTimeOut = document.querySelector('#timeout');
-const formRoomNumber = document.querySelector('#room_number');
-const formCapacity = document.querySelector('#capacity');
-const formSubmitButton = document.querySelector('.form__submit');
-const formResetButton = document.querySelector('.form__reset');
-
-const highlightInvalidInput = formInput => {
-  formInput.classList.add('input--invalid');
-};
-const unhighlightInvalidInput = formInput => {
-  if (formInput.classList.contains('input--invalid')) {
-    formInput.classList.remove('input--invalid');
-  }
-};
-/**
- * Toggle highlight on invalid element
- * @param evt event
- * @param element Node
- * @param min number
- * @param max number
- */
-const toggleLightInvalidElement = (evt, element, min, max) => {
-  const { value } = evt.target;
-  if (value < min || value > max) {
-    highlightInvalidInput(element);
-  } else {
-    unhighlightInvalidInput(element);
-  }
-};
-/**
- * Change on title of ad-form
- * @param evt
- */
-const onFormTitleInput = evt => {
-  toggleLightInvalidElement(evt, formTitle, TITLE_LENGTH.MIN, TITLE_LENGTH.MAX);
-};
-/**
- * When change type of houses, then change min-price
- */
-const onFormHouseTypeChange = () => {
-  const minPrice = houseTypeMinPrice[formHouseType.value];
-  formPrice.min = minPrice;
-  formPrice.placeholder = minPrice;
-  return minPrice;
-};
-/**
- * Change on price of ad-form
- * @param evt
- */
-const onFormPriceChange = evt => {
-  const minPrice = onFormHouseTypeChange();
-  toggleLightInvalidElement(evt, formPrice, minPrice, maxPrice);
-};
-
-/**
- * Sync change formTimeIn and adFormTimeout
- * @param evt
- */
-const onFormTime = evt => {
-  const formTime = evt.target === formTimeIn ? formTimeOut : formTimeIn;
-  formTime.value = evt.target.value;
-};
-
-/**
- * Monitored compliance number of rooms and number of guests
- */
-const onFormRoomNumber = () => {
-  const rooms = formRoomNumber.value;
-  const guests = formCapacity.value;
-
-  if (rooms === forEvent.rooms && guests !== forEvent.guests) {
-    formRoomNumber.setCustomValidity(
-      `При выборе 100 комнат можно выбрать только вариант "не для гостей"`,
-    );
-    highlightInvalidInput(formRoomNumber);
-  } else if (rooms !== forEvent.rooms && guests === forEvent.guests) {
-    formRoomNumber.setCustomValidity(
-      `Для ${rooms} ${
-        rooms === '1' ? 'комнаты' : 'комнат'
-      } не может быть количество мест "не для гостей"`,
-    );
-    highlightInvalidInput(formRoomNumber);
-  } else if (rooms < guests) {
-    formRoomNumber.setCustomValidity(
-      `Количество комнат должно быть больше или равно количеству гостей`,
-    );
-    highlightInvalidInput(formRoomNumber);
-  } else {
-    formRoomNumber.setCustomValidity(``);
-    unhighlightInvalidInput(formRoomNumber);
-  }
-};
-/**
- * Deactivate form when click on reset-button
- */
-const onFormResetButton = evt => {
-  evt.preventDefault();
-  deactivateMap();
-  deactivateForm();
-  removeFormListeners();
-  isPageActive = false;
-};
-
-const activateFormListeners = () => {
-  formTitle.addEventListener('input', onFormTitleInput);
-  formPrice.addEventListener('change', onFormPriceChange);
-  formHouseType.addEventListener('change', onFormHouseTypeChange);
-  formTimeIn.addEventListener('change', onFormTime);
-  formTimeOut.addEventListener('change', onFormTime);
-  formSubmitButton.addEventListener('click', onFormRoomNumber);
-  formResetButton.addEventListener('click', onFormResetButton);
-};
-
-const removeFormListeners = () => {
-  formTitle.removeEventListener('input', onFormTitleInput);
-  formPrice.removeEventListener('change', onFormPriceChange);
-  formHouseType.removeEventListener('change', onFormHouseTypeChange);
-  formTimeIn.removeEventListener('change', onFormTime);
-  formTimeOut.removeEventListener('change', onFormTime);
-  formSubmitButton.removeEventListener('click', onFormRoomNumber);
-  formResetButton.removeEventListener('click', onFormResetButton);
-};
 
 // handle mapPinMain
 const onMapPinMainMouseDown = evt => {
@@ -592,8 +423,8 @@ const onMapPinMainMouseDown = evt => {
     if (isPageActive) {
       setAddress();
     } else {
-      mapActiveState();
-      activateFormListeners();
+      activeState();
+      window.form.activateFormListeners();
       setAddress();
     }
 

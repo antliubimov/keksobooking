@@ -1,0 +1,2 @@
+// data.js
+'use strict';
