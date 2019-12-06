@@ -176,8 +176,8 @@ const createPin = pin => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinImg = pinElement.querySelector('img');
 
-  pinElement.style.left = `${pin.location.x - PIN_SIZE.WIDTH / 2}px`;
-  pinElement.style.top = `${pin.location.y - PIN_SIZE.HEIGHT - TAIL_HEIGHT}px`;
+  pinElement.style.left = `${Math.round(pin.location.x - PIN_SIZE.WIDTH / 2)}px`;
+  pinElement.style.top = `${Math.round(pin.location.y - PIN_SIZE.HEIGHT / 2 - TAIL_HEIGHT)}px`;
   pinImg.src = `${pin.author.avatar}`;
   pinImg.alt = `${pin.offer.title}`;
 
