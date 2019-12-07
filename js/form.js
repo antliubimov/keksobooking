@@ -194,6 +194,7 @@
   };
 
   return window.form = {
+    setAddress,
     activateForm,
     activateFormListeners,
   }
