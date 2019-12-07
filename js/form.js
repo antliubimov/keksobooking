@@ -1,11 +1,11 @@
 // form.js
-"use strict";
+'use strict';
 
 /*
  * Validation of form
  * */
 
-(function () {
+(function() {
   const TITLE_LENGTH = {
     MIN: 30,
     MAX: 100,
@@ -35,7 +35,6 @@
   const formCapacity = document.querySelector('#capacity');
   const formSubmitButton = document.querySelector('.form__submit');
   const formResetButton = document.querySelector('.form__reset');
-
 
   const setAddress = () => {
     formAddress.value = `${window.data.getLocation(mapPinMain).join(', ')}`;
@@ -70,7 +69,12 @@
    * @param evt
    */
   const onFormTitleInput = evt => {
-    toggleLightInvalidElement(evt, formTitle, TITLE_LENGTH.MIN, TITLE_LENGTH.MAX);
+    toggleLightInvalidElement(
+      evt,
+      formTitle,
+      TITLE_LENGTH.MIN,
+      TITLE_LENGTH.MAX,
+    );
   };
   /**
    * When change type of houses, then change min-price
@@ -193,9 +197,9 @@
     formResetButton.removeEventListener('click', onFormResetButton);
   };
 
-  return window.form = {
+  return (window.form = {
     setAddress,
     activateForm,
     activateFormListeners,
-  }
+  });
 })();

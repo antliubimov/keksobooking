@@ -1,7 +1,7 @@
 // utils.js
 'use strict';
 
-(function () {
+(function() {
   /**
    *
    * @param min number
@@ -65,11 +65,11 @@
     return featuresArr;
   };
 
-  return window.utils = {
+  return (window.utils = {
     getRandomNumber,
     getRandomArray,
     shuffle,
     getRandomKey,
     randomFeatures,
-  };
+  });
 })();

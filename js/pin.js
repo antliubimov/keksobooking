@@ -1,7 +1,7 @@
 // pin.js
 'use strict';
 
-(function () {
+(function() {
   const template = document.querySelector('template');
   const pinTemplate = template.content.querySelector('.map__pin');
   /**
@@ -17,7 +17,9 @@
       pin.location.x - window.data.PIN_SIZE.WIDTH / 2,
     )}px`;
     pinElement.style.top = `${Math.round(
-      pin.location.y - window.data.PIN_SIZE.HEIGHT / 2 - window.data.TAIL_HEIGHT,
+      pin.location.y -
+        window.data.PIN_SIZE.HEIGHT / 2 -
+        window.data.TAIL_HEIGHT,
     )}px`;
     pinImg.src = `${pin.author.avatar}`;
     pinImg.alt = `${pin.offer.title}`;
@@ -45,8 +47,7 @@
     return pinsFragment;
   };
 
-  return window.pin = {
+  return (window.pin = {
     renderPins,
-  };
+  });
 })();
-

@@ -1,7 +1,7 @@
 // map.js
 'use strict';
 
-(function () {
+(function() {
   let isPageActive = false;
 
   /**
@@ -11,7 +11,6 @@
     const mapCard = document.querySelector('.map__card');
     if (mapCard) mapCard.remove();
   };
-
 
   /**
    * Remove all pins on map
@@ -45,7 +44,9 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    document.querySelector('.map__pins').appendChild(window.pin.renderPins(window.data.ads));
+    document
+      .querySelector('.map__pins')
+      .appendChild(window.pin.renderPins(window.data.ads));
     activateMapFilters();
   };
 
@@ -71,15 +72,14 @@
    */
   const deactivateMap = () => {
     map.classList.add('map--faded');
-    mapPinMain.style.left = `${MAIN_PIN_START_LOCATION[0] - Math.round(window.data.MAIN_PIN.WIDTH / 2)}px`;
-    mapPinMain.style.top = `${MAIN_PIN_START_LOCATION[1] - window.data.MAIN_PIN.HEIGHT - window.data.TAIL_HEIGHT}px`;
+    mapPinMain.style.left = `${MAIN_PIN_START_LOCATION[0] -
+      Math.round(window.data.MAIN_PIN.WIDTH / 2)}px`;
+    mapPinMain.style.top = `${MAIN_PIN_START_LOCATION[1] -
+      window.data.MAIN_PIN.HEIGHT -
+      window.data.TAIL_HEIGHT}px`;
     removePins();
     deactivateMapFilters();
   };
-
-
-
-
 
   /**
    * Drag-n-drop on mapPinMain
@@ -142,11 +142,9 @@
 
   mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 
-  return window.map = {
+  return (window.map = {
     isPageActive,
     removeMapCard,
-    deactivateMap
-  };
+    deactivateMap,
+  });
 })();
-
-

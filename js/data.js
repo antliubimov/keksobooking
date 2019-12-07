@@ -1,7 +1,7 @@
 // data.js
 'use strict';
 
-(function () {
+(function() {
   const PIN_SIZE = {
     WIDTH: 44,
     HEIGHT: 44,
@@ -68,8 +68,14 @@
     const adsArr = [];
 
     for (let i = 0; i < 8; i += 1) {
-      const x = window.utils.getRandomNumber(DRAG_LIMIT.X.MIN, DRAG_LIMIT.X.MAX);
-      const y = window.utils.getRandomNumber(DRAG_LIMIT.Y.MIN, DRAG_LIMIT.Y.MAX);
+      const x = window.utils.getRandomNumber(
+        DRAG_LIMIT.X.MIN,
+        DRAG_LIMIT.X.MAX,
+      );
+      const y = window.utils.getRandomNumber(
+        DRAG_LIMIT.Y.MIN,
+        DRAG_LIMIT.Y.MAX,
+      );
 
       const ad = {
         author: {
@@ -109,14 +115,12 @@
     ];
   };
 
-  return window.data = {
+  return (window.data = {
     PIN_SIZE,
     TAIL_HEIGHT,
     MAIN_PIN,
     DRAG_LIMIT,
     ads,
     getLocation,
-  };
+  });
 })();
-
-

@@ -1,7 +1,7 @@
 // card.js
 'use strict';
 
-(function () {
+(function() {
   const ESC_KEY = 'Escape';
   const template = document.querySelector('template');
   const mapCardTemplate = template.content.querySelector('.map__card');
@@ -65,7 +65,9 @@
     adElement.querySelector(
       '.popup__price',
     ).textContent = `${adData.offer.price}₽/ночь`;
-    adElement.querySelector('.popup__type').textContent = `${adData.offer.type}`;
+    adElement.querySelector(
+      '.popup__type',
+    ).textContent = `${adData.offer.type}`;
     adElement.querySelector(
       '.popup__text--capacity',
     ).textContent = `${adData.offer.rooms} комнаты для ${adData.offer.guests} гостей`;
