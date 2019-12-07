@@ -4,8 +4,6 @@
 (function () {
   let isPageActive = false;
 
-
-
   /**
    * Remove card on a map
    */
@@ -127,11 +125,11 @@
       }
 
       if (isPageActive) {
-        setAddress();
+        window.form.setAddress();
       } else {
         activeState();
         window.form.activateFormListeners();
-        setAddress();
+        window.form.setAddress();
       }
 
       document.removeEventListener('mousemove', onMouseMove);
