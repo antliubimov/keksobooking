@@ -4,6 +4,11 @@
 (function() {
   let isPageActive = false;
 
+  const PIN_SIZE = window.data.PIN_SIZE;
+  const TAIL_HEIGHT = window.data.TAIL_HEIGHT;
+  const MAIN_PIN = window.data.MAIN_PIN;
+  const DRAG_LIMIT = window.data.DRAG_LIMIT;
+
   /**
    * Remove all pins on map
    */
@@ -106,8 +111,15 @@
         y: moveEvt.clientY,
       };
 
-      mapPinMain.style.top = `${mapPinMain.offsetTop - shift.y}px`;
-      mapPinMain.style.left = `${mapPinMain.offsetLeft - shift.x}px`;
+      const topShift = mapPinMain.offsetTop - shift.y;
+      const leftShift = mapPinMain.offsetLeft - shift.x;
+
+      if (topShift >= DRAG_LIMIT.Y.MIN && topShift <= DRAG_LIMIT.Y.MAX) {
+      mapPinMain.style.top = `${topShift }px`;
+      }
+      if (leftShift >= DRAG_LIMIT.X.MIN && leftShift <= DRAG_LIMIT.X.MAX) {
+        mapPinMain.style.left = `${leftShift}px`;
+      }
     };
 
     const onMouseUp = upEvt => {
