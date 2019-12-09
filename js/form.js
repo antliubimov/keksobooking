@@ -123,6 +123,7 @@
         `Количество комнат должно быть больше или равно количеству гостей`,
       );
       highlightInvalidInput(formRoomNumber);
+      highlightInvalidInput(formRoomNumber);
     } else {
       formRoomNumber.setCustomValidity(``);
       unhighlightInvalidInput(formRoomNumber);
@@ -167,10 +168,9 @@
    */
   const onFormResetButton = evt => {
     evt.preventDefault();
-    window.map.deactivateMap();
+    window.map.deactivateState();
     deactivateForm();
     removeFormListeners();
-    window.map.isPageActive = false;
   };
 
   const activateFormListeners = () => {
