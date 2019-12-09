@@ -70,7 +70,9 @@
       window.data.MAIN_PIN.HEIGHT -
       window.data.TAIL_HEIGHT}px`;
   };
-
+  /**
+   * Deactivate a state of map
+   */
   const deactivateState = () => {
     removePins();
     deactivateMapFilters();
