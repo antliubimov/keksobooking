@@ -111,14 +111,23 @@
         y: moveEvt.clientY,
       };
 
-      const topShift = mapPinMain.offsetTop - shift.y;
-      const leftShift = mapPinMain.offsetLeft - shift.x;
+      const mainPinPosition = {
+        x: mapPinMain.offsetLeft - shift.x,
+        y: mapPinMain.offsetTop - shift.y,
+      };
 
-      if (topShift >= DRAG_LIMIT.Y.MIN && topShift <= DRAG_LIMIT.Y.MAX) {
-      mapPinMain.style.top = `${topShift }px`;
+      const BORDER = {
+        top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT - TAIL_HEIGHT,
+        bottom: DRAG_LIMIT.Y.MAX - MAIN_PIN.HEIGHT - TAIL_HEIGHT,
+        left: DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH / 2,
+        right: DRAG_LIMIT.X.MAX + PIN_SIZE.WIDTH / 2,
+      };
+
+      if (mainPinPosition.y >= BORDER.top &&  mainPinPosition.y <= BORDER.bottom) {
+      mapPinMain.style.top = `${mainPinPosition.y}px`;
       }
-      if (leftShift >= DRAG_LIMIT.X.MIN && leftShift <= DRAG_LIMIT.X.MAX) {
-        mapPinMain.style.left = `${leftShift}px`;
+      if (mainPinPosition.x >= BORDER.left && mainPinPosition.x <= BORDER.right) {
+        mapPinMain.style.left = `${mainPinPosition.x}px`;
       }
     };
 
