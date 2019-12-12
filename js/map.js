@@ -117,9 +117,9 @@
       };
 
       const BORDER = {
-        top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT + TAIL_HEIGHT,
-        bottom: DRAG_LIMIT.Y.MAX,
-        left: DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH / 2,
+        top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
+        bottom: DRAG_LIMIT.Y.MAX - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
+        left: DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH /2,
         right: DRAG_LIMIT.X.MAX + PIN_SIZE.WIDTH / 2,
       };
 
