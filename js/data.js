@@ -104,8 +104,8 @@
 
   const getLocation = element => {
     return [
-      element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2),
-      element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT,
+      element.offsetLeft ,
+      element.offsetTop + Math.round(MAIN_PIN.HEIGHT / 2 + TAIL_HEIGHT),
     ];
   };
 
