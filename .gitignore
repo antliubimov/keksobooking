@@ -84,5 +84,7 @@ fabric.properties
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+.DS_Store
 .idea/
 node_modules/
+
