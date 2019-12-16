@@ -30,6 +30,33 @@
   const MAIN_PIN_START_LOCATION = window.data.getLocation(mapPinMain);
 
   /**
+   * Rendered pins when a response is OK
+   * @param ads
+   */
+  const successHandler = (ads) => {
+    document
+      .querySelector('.map__pins')
+      .appendChild(window.pin.renderPins(ads));
+
+  };
+  /**
+   * Show error-message when a response is fail
+   * @param errorMessage
+   */
+  const errorHandler = (errorMessage) => {
+    const node = document.createElement('div');
+    node.classList.add('error');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  /**
    * Activate filters of map
    */
   const activateMapFilters = () => {
@@ -41,9 +68,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    document
-      .querySelector('.map__pins')
-      .appendChild(window.pin.renderPins(window.data.ads));
+    window.backend.load(successHandler, errorHandler);
     activateMapFilters();
   };
 

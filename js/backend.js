@@ -9,7 +9,7 @@
    * @param {callback} onError
    */
   const load = (onLoad, onError) => {
-    const xhr = XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     const urlGet = `${URL}/data`;
 
