@@ -55,7 +55,14 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement('afterbegin', node);
   };
-
+  /**
+   * Remove error of connection
+   */
+  const removeError = () => {
+    if (document.querySelector('.error')) {
+      document.querySelector('.error').remove();
+    }
+  };
   /**
    * Activate filters of map
    */
@@ -68,6 +75,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
+    removeError();
     window.backend.load(successHandler, errorHandler);
     activateMapFilters();
   };
