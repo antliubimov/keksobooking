@@ -112,6 +112,7 @@
    * Deactivate a state of map
    */
   const deactivateState = () => {
+    removeError();
     removePins();
     deactivateMapFilters();
     deactivateMap();

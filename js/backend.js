@@ -39,7 +39,25 @@
    * @param {callback} onLoad
    * @param {callback} onError
    */
-  const save = (data, onLoad, onError) => {};
+  const save = (data, onLoad, onError) => {
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function() {
+      if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+        onLoad(xhr.response);
+      } else {
+        onError(`Error: ${xhr.status} ${xhr.statusText}`);
+      }
+    });
+
+    xhr.addEventListener('error', function() {
+      onError('Connection error occurred');
+    });
+
+    xhr.open('POST', URL);
+    xhr.send(data);
+  };
 
   window.backend = {
     load,
