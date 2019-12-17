@@ -76,6 +76,16 @@
     }
   };
 
+  /**
+   * Remove error of connection
+   */
+  const removeError = () => {
+    const errorMessage  = document.querySelector('.error-message');
+    errorMessage.remove();
+    errorMessage.removeEventListener('click', onErrorMessageClick);
+    document.removeEventListener('keydown', onErrorMessageEscDown);
+  };
+
   const onErrorMessageClick = () => {
     removeError();
   };
@@ -95,16 +105,6 @@
     document.body.insertAdjacentElement('afterbegin', node);
     node.addEventListener('click', onErrorMessageClick);
     document.addEventListener('keydown', onErrorMessageEscDown);
-  };
-
-  /**
-   * Remove error of connection
-   */
-  const removeError = () => {
-    const errorMessage  = document.querySelector('.error');
-    errorMessage.remove();
-    errorMessage.removeEventListener('click', onErrorMessageClick);
-    document.removeEventListener('keydown', onErrorMessageEscDown);
   };
 
   return window.utils = {
