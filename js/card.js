@@ -2,7 +2,6 @@
 'use strict';
 
 (function () {
-  const ESC_KEY = 'Escape';
   const template = document.querySelector('template');
   const mapCardTemplate = template.content.querySelector('.map__card');
 
@@ -90,9 +89,7 @@
     const onAdCloseClick = () => closeAd();
 
     const onAdElementEscPress = evt => {
-      if (evt.key === ESC_KEY) {
-        closeAd();
-      }
+      window.utils.escDown(evt, closeAd);
     };
 
     adCloseButton.addEventListener('click', onAdCloseClick);
