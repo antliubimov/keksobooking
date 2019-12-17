@@ -6,6 +6,7 @@
  * */
 
 (function () {
+  const ESC_KEY = 'Escape';
   const TITLE_LENGTH = {
     MIN: 30,
     MAX: 100,
@@ -35,6 +36,7 @@
   const formCapacity = document.querySelector('#capacity');
   const formSubmitButton = document.querySelector('.form__submit');
   const formResetButton = document.querySelector('.form__reset');
+  const successMessage = document.querySelector('.success');
 
 
   const setAddress = () => {
@@ -181,6 +183,7 @@
     formTimeOut.addEventListener('change', onFormTime);
     formSubmitButton.addEventListener('click', onFormRoomNumber);
     formResetButton.addEventListener('click', onFormResetButton);
+    adForm.addEventListener('submit', submitAdForm);
   };
 
   const removeFormListeners = () => {
@@ -191,6 +194,73 @@
     formTimeOut.removeEventListener('change', onFormTime);
     formSubmitButton.removeEventListener('click', onFormRoomNumber);
     formResetButton.removeEventListener('click', onFormResetButton);
+    adForm.removeEventListener('submit', submitAdForm);
+  };
+  /**
+   * Show success-message
+   */
+  const showSuccess = () => {
+    successMessage.classList.remove('hidden');
+    successMessage.addEventListener('click', onSuccessMessageClick);
+    document.addEventListener('keydown', onSuccessMessageEscDown);
+  };
+  /**
+   * Hidden success-message
+   */
+  const successMessageHidden = () => {
+    successMessage.classList.add('hidden');
+    successMessage.addEventListener('click', onSuccessMessageClick);
+    document.addEventListener('keydown', onSuccessMessageEscDown);
+  };
+  /**
+   * Hidden the success-message when click on it
+   */
+  const onSuccessMessageClick = () => {
+    successMessageHidden();
+  };
+  /**
+   * Hidden the success-message when down Escape
+   * @param evt
+   */
+  const onSuccessMessageEscDown = (evt) => {
+    if (evt.key === ESC_KEY) {
+      successMessageHidden();
+    }
+  };
+
+  /**
+   * Show error-message when a response is fail
+   * @param errorMessage
+   */
+  const errorHandler = (errorMessage) => {
+    const node = document.createElement('div');
+    node.classList.add('error-message');
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+  /**
+   * Remove error of connection
+   */
+  const removeError = () => {
+    if (document.querySelector('.error')) {
+      document.querySelector('.error').remove();
+    }
+  };
+
+  const successHandler = (response) => {
+    removeError();
+    showSuccess();
+    window.map.deactivateState();
+    deactivateForm();
+    removeFormListeners();
+  };
+  /**
+   * Submit data of adForm
+   * @param evt
+   */
+  const submitAdForm = (evt) => {
+    window.backend.save(new FormData(adForm), successHandler, errorHandler);
+    evt.preventDefault();
   };
 
   return window.form = {
