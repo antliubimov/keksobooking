@@ -24,9 +24,7 @@
   const map = document.querySelector('.map');
   const mapFilterSelects = document.querySelectorAll('.map__filter');
   const mapFilterFieldset = document.querySelector('.map__filter-set');
-
   const mapPinMain = document.querySelector('.map__pin--main');
-
   const MAIN_PIN_START_LOCATION = window.data.getLocation(mapPinMain);
 
   /**
@@ -39,24 +37,7 @@
       .appendChild(window.pin.renderPins(ads));
 
   };
-  /**
-   * Show error-message when a response is fail
-   * @param errorMessage
-   */
-  const errorHandler = (errorMessage) => {
-    const node = document.createElement('div');
-    node.classList.add('error-message');
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-  /**
-   * Remove error of connection
-   */
-  const removeError = () => {
-    if (document.querySelector('.error')) {
-      document.querySelector('.error').remove();
-    }
-  };
+
   /**
    * Activate filters of map
    */
@@ -69,8 +50,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    removeError();
-    window.backend.load(successHandler, errorHandler);
+    window.backend.load(successHandler, window.utils.errorHandler);
     activateMapFilters();
   };
 
@@ -106,7 +86,6 @@
    * Deactivate a state of map
    */
   const deactivateState = () => {
-    removeError();
     removePins();
     deactivateMapFilters();
     deactivateMap();

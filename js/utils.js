@@ -65,11 +65,46 @@
     }
     return featuresArr;
   };
-
+  /**
+   * Execute func when keydown Esc
+   * @param evt
+   * @param func
+   */
   const escDown = (evt, func) => {
     if (evt.key === ESC_KEY) {
       func();
     }
+  };
+
+  const onErrorMessageClick = () => {
+    removeError();
+  };
+
+  const onErrorMessageEscDown = (evt) => {
+    escDown(evt, removeError);
+  };
+
+  /**
+   * Show error-message when a response is fail
+   * @param errorMessage
+   */
+  const errorHandler = (errorMessage) => {
+    const node = document.createElement('div');
+    node.classList.add('error-message');
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+    node.addEventListener('click', onErrorMessageClick);
+    document.addEventListener('keydown', onErrorMessageEscDown);
+  };
+
+  /**
+   * Remove error of connection
+   */
+  const removeError = () => {
+    const errorMessage  = document.querySelector('.error');
+    errorMessage.remove();
+    errorMessage.removeEventListener('click', onErrorMessageClick);
+    document.removeEventListener('keydown', onErrorMessageEscDown);
   };
 
   return window.utils = {
@@ -79,5 +114,6 @@
     getRandomKey,
     randomFeatures,
     escDown,
+    errorHandler,
   };
 })();

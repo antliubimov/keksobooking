@@ -223,32 +223,10 @@
    * @param evt
    */
   const onSuccessMessageEscDown = (evt) => {
-    if (evt.key === ESC_KEY) {
-      successMessageHidden();
-    }
-  };
-
-  /**
-   * Show error-message when a response is fail
-   * @param errorMessage
-   */
-  const errorHandler = (errorMessage) => {
-    const node = document.createElement('div');
-    node.classList.add('error-message');
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-  /**
-   * Remove error of connection
-   */
-  const removeError = () => {
-    if (document.querySelector('.error')) {
-      document.querySelector('.error').remove();
-    }
+    window.utils.escDown(evt, successMessageHidden);
   };
 
   const successHandler = (response) => {
-    removeError();
     showSuccess();
     window.map.deactivateState();
     deactivateForm();
@@ -259,7 +237,7 @@
    * @param evt
    */
   const submitAdForm = (evt) => {
-    window.backend.save(new FormData(adForm), successHandler, errorHandler);
+    window.backend.save(new FormData(adForm), successHandler, window.utils.errorHandler);
     evt.preventDefault();
   };
 
