@@ -11,7 +11,7 @@
    * @param onError
    * @param data
    */
-  const createXHR = (method, url, onLoad, onError, data) => {
+  const createXHR = (method, url, onLoad, onError) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.addEventListener('load', function() {
@@ -31,8 +31,7 @@
     xhr.timeout = 10000;
 
     xhr.open(method, url);
-    xhr.send(data);
-
+    return xhr;
   };
   /**
    * Loading data from URL
@@ -41,7 +40,7 @@
    */
   const load = (onLoad, onError) => {
     const urlGet = `${URL}/data`;
-    createXHR('GET', urlGet, onLoad, onError);
+    createXHR('GET', urlGet, onLoad, onError).send();
   };
 
   /**
@@ -51,7 +50,7 @@
    * @param {callback} onError
    */
   const save = (data, onLoad, onError) => {
-    createXHR('POST', URL, onLoad, onError, data);
+    createXHR('POST', URL, onLoad, onError).send(data);
   };
 
   window.backend = {
