@@ -54,6 +54,10 @@
     xhr.addEventListener('error', function() {
       onError('Connection error occurred');
     });
+    xhr.addEventListener('timeout', function() {
+      onError(`The request did not succeed in ${xhr.timeout} ms`);
+    });
+    xhr.timeout = 10000;
 
     xhr.open('POST', URL);
     xhr.send(data);
