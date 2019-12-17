@@ -2,6 +2,7 @@
 'use strict';
 
 (function () {
+  const ESC_KEY = 'Escape';
   /**
    *
    * @param min number
@@ -65,11 +66,18 @@
     return featuresArr;
   };
 
+  const escDown = (evt, func) => {
+    if (evt.key === ESC_KEY) {
+      func();
+    }
+  };
+
   return window.utils = {
     getRandomNumber,
     getRandomArray,
     shuffle,
     getRandomKey,
     randomFeatures,
+    escDown,
   };
 })();
