@@ -1,7 +1,7 @@
 // data.js
 'use strict';
 
-(function() {
+(function () {
   const PIN_SIZE = {
     WIDTH: 44,
     HEIGHT: 44,
@@ -64,63 +64,59 @@
    * Create array of ads
    * @returns {[]}
    */
-  const createAds = () => {
-    const adsArr = [];
+  // const createAds = () => {
+  //   const adsArr = [];
+  //
+  //   for (let i = 0; i < 8; i += 1) {
+  //     const x = window.utils.getRandomNumber(DRAG_LIMIT.X.MIN, DRAG_LIMIT.X.MAX);
+  //     const y = window.utils.getRandomNumber(DRAG_LIMIT.Y.MIN, DRAG_LIMIT.Y.MAX);
+  //
+  //     const ad = {
+  //       author: {
+  //         avatar: `img/avatars/user0${avatarNums[i]}.png`,
+  //       },
+  //       offer: {
+  //         title: TITLE[randomTitleNums[i]],
+  //         address: `${x}, ${y}`,
+  //         price: window.utils.getRandomNumber(PRICE.MIN, PRICE.MAX),
+  //         type: TYPE[window.utils.getRandomKey(TYPE)],
+  //         rooms: window.utils.getRandomNumber(1, 5),
+  //         guests: window.utils.getRandomNumber(1, 10),
+  //         checkin: IN_OUT[window.utils.getRandomNumber(0, IN_OUT.length - 1)],
+  //         checkout: IN_OUT[window.utils.getRandomNumber(0, IN_OUT.length - 1)],
+  //         features: window.utils.randomFeatures(FEATURES),
+  //         description: '',
+  //         photos: window.utils.shuffle(PHOTOS),
+  //       },
+  //       location: {
+  //         x,
+  //         y,
+  //       },
+  //     };
+  //
+  //     adsArr.push(ad);
+  //   }
+  //
+  //   return adsArr;
+  // };
 
-    for (let i = 0; i < 8; i += 1) {
-      const x = window.utils.getRandomNumber(
-        DRAG_LIMIT.X.MIN,
-        DRAG_LIMIT.X.MAX,
-      );
-      const y = window.utils.getRandomNumber(
-        DRAG_LIMIT.Y.MIN,
-        DRAG_LIMIT.Y.MAX,
-      );
-
-      const ad = {
-        author: {
-          avatar: `img/avatars/user0${avatarNums[i]}.png`,
-        },
-        offer: {
-          title: TITLE[randomTitleNums[i]],
-          address: `${x}, ${y}`,
-          price: window.utils.getRandomNumber(PRICE.MIN, PRICE.MAX),
-          type: TYPE[window.utils.getRandomKey(TYPE)],
-          rooms: window.utils.getRandomNumber(1, 5),
-          guests: window.utils.getRandomNumber(1, 10),
-          checkin: IN_OUT[window.utils.getRandomNumber(0, IN_OUT.length - 1)],
-          checkout: IN_OUT[window.utils.getRandomNumber(0, IN_OUT.length - 1)],
-          features: window.utils.randomFeatures(FEATURES),
-          description: '',
-          photos: window.utils.shuffle(PHOTOS),
-        },
-        location: {
-          x,
-          y,
-        },
-      };
-
-      adsArr.push(ad);
-    }
-
-    return adsArr;
-  };
-
-  const ads = createAds();
+  //const ads = createAds();
 
   const getLocation = element => {
     return [
-      element.offsetLeft + Math.round(MAIN_PIN.WIDTH / 2),
-      element.offsetTop + MAIN_PIN.HEIGHT + TAIL_HEIGHT,
+      element.offsetLeft ,
+      element.offsetTop + Math.round(MAIN_PIN.HEIGHT / 2 + TAIL_HEIGHT),
     ];
   };
 
-  return (window.data = {
+  return window.data = {
     PIN_SIZE,
     TAIL_HEIGHT,
     MAIN_PIN,
     DRAG_LIMIT,
-    ads,
+  //  ads,
     getLocation,
-  });
+  };
 })();
+
+

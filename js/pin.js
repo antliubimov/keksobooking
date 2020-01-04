@@ -1,9 +1,18 @@
 // pin.js
 'use strict';
 
-(function() {
+(function () {
   const template = document.querySelector('template');
   const pinTemplate = template.content.querySelector('.map__pin');
+
+  /**
+   * Remove card on a map
+   */
+  const removeMapCard = () => {
+    const mapCard = document.querySelector('.map__card');
+    if (mapCard) mapCard.remove();
+  };
+
   /**
    * Create pin-element
    * @param pin
@@ -17,15 +26,13 @@
       pin.location.x - window.data.PIN_SIZE.WIDTH / 2,
     )}px`;
     pinElement.style.top = `${Math.round(
-      pin.location.y -
-        window.data.PIN_SIZE.HEIGHT / 2 -
-        window.data.TAIL_HEIGHT,
+      pin.location.y - window.data.PIN_SIZE.HEIGHT - window.data.TAIL_HEIGHT,
     )}px`;
     pinImg.src = `${pin.author.avatar}`;
     pinImg.alt = `${pin.offer.title}`;
 
     const onPinElementClick = () => {
-      window.map.removeMapCard();
+      removeMapCard();
       const adFragment = document.createDocumentFragment();
       adFragment.appendChild(window.card.createAd(pin));
       document.querySelector('.map__filters-container').before(adFragment);
@@ -47,7 +54,8 @@
     return pinsFragment;
   };
 
-  return (window.pin = {
+  return window.pin = {
     renderPins,
-  });
+  };
 })();
+

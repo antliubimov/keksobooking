@@ -4,13 +4,10 @@
 (function() {
   let isPageActive = false;
 
-  /**
-   * Remove card on a map
-   */
-  const removeMapCard = () => {
-    const mapCard = document.querySelector('.map__card');
-    if (mapCard) mapCard.remove();
-  };
+  const PIN_SIZE = window.data.PIN_SIZE;
+  const TAIL_HEIGHT = window.data.TAIL_HEIGHT;
+  const MAIN_PIN = window.data.MAIN_PIN;
+  const DRAG_LIMIT = window.data.DRAG_LIMIT;
 
   /**
    * Remove all pins on map
@@ -27,10 +24,18 @@
   const map = document.querySelector('.map');
   const mapFilterSelects = document.querySelectorAll('.map__filter');
   const mapFilterFieldset = document.querySelector('.map__filter-set');
-
   const mapPinMain = document.querySelector('.map__pin--main');
-
   const MAIN_PIN_START_LOCATION = window.data.getLocation(mapPinMain);
+
+  /**
+   * Rendered pins when a response is OK
+   * @param ads
+   */
+  const successHandler = ads => {
+    document
+      .querySelector('.map__pins')
+      .appendChild(window.pin.renderPins(ads));
+  };
 
   /**
    * Activate filters of map
@@ -44,9 +49,7 @@
    */
   const activateMap = () => {
     map.classList.remove('map--faded');
-    document
-      .querySelector('.map__pins')
-      .appendChild(window.pin.renderPins(window.data.ads));
+    window.backend.load(successHandler, window.utils.errorHandler);
     activateMapFilters();
   };
 
@@ -77,10 +80,16 @@
     mapPinMain.style.top = `${MAIN_PIN_START_LOCATION[1] -
       window.data.MAIN_PIN.HEIGHT -
       window.data.TAIL_HEIGHT}px`;
+  };
+  /**
+   * Deactivate a state of map
+   */
+  const deactivateState = () => {
     removePins();
     deactivateMapFilters();
+    deactivateMap();
+    isPageActive = false;
   };
-
   /**
    * Drag-n-drop on mapPinMain
    * @param evt
@@ -97,7 +106,6 @@
 
     const onMouseMove = moveEvt => {
       moveEvt.preventDefault();
-      dragged = true;
 
       const shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -109,28 +117,40 @@
         y: moveEvt.clientY,
       };
 
-      mapPinMain.style.top = `${mapPinMain.offsetTop - shift.y}px`;
-      mapPinMain.style.left = `${mapPinMain.offsetLeft - shift.x}px`;
+      const mainPinPosition = {
+        x: mapPinMain.offsetLeft - shift.x,
+        y: mapPinMain.offsetTop - shift.y,
+      };
+
+      const BORDER = {
+        top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
+        bottom: DRAG_LIMIT.Y.MAX - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
+        left: DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH / 2,
+        right: DRAG_LIMIT.X.MAX + PIN_SIZE.WIDTH / 2,
+      };
+
+      if (
+        mainPinPosition.y >= BORDER.top &&
+        mainPinPosition.y <= BORDER.bottom
+      ) {
+        mapPinMain.style.top = `${mainPinPosition.y}px`;
+      }
+      if (
+        mainPinPosition.x >= BORDER.left &&
+        mainPinPosition.x <= BORDER.right
+      ) {
+        mapPinMain.style.left = `${mainPinPosition.x}px`;
+      }
     };
 
     const onMouseUp = upEvt => {
       upEvt.preventDefault();
 
-      if (dragged) {
-        const onClickPreventDefault = evt => {
-          evt.preventDefault();
-          mapPinMain.removeEventListener('click', onClickPreventDefault);
-        };
-        mapPinMain.addEventListener('click', onClickPreventDefault);
-      }
-
-      if (isPageActive) {
-        window.form.setAddress();
-      } else {
+      if (!isPageActive) {
         activeState();
         window.form.activateFormListeners();
-        window.form.setAddress();
       }
+      window.form.setAddress();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -143,8 +163,7 @@
   mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 
   return (window.map = {
-    isPageActive,
-    removeMapCard,
+    deactivateState,
     deactivateMap,
   });
 })();

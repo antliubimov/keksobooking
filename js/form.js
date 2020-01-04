@@ -6,6 +6,7 @@
  * */
 
 (function() {
+  const ESC_KEY = 'Escape';
   const TITLE_LENGTH = {
     MIN: 30,
     MAX: 100,
@@ -35,6 +36,7 @@
   const formCapacity = document.querySelector('#capacity');
   const formSubmitButton = document.querySelector('.form__submit');
   const formResetButton = document.querySelector('.form__reset');
+  const successMessage = document.querySelector('.success');
 
   const setAddress = () => {
     formAddress.value = `${window.data.getLocation(mapPinMain).join(', ')}`;
@@ -127,6 +129,7 @@
         `Количество комнат должно быть больше или равно количеству гостей`,
       );
       highlightInvalidInput(formRoomNumber);
+      highlightInvalidInput(formRoomNumber);
     } else {
       formRoomNumber.setCustomValidity(``);
       unhighlightInvalidInput(formRoomNumber);
@@ -171,10 +174,9 @@
    */
   const onFormResetButton = evt => {
     evt.preventDefault();
-    window.map.deactivateMap();
+    window.map.deactivateState();
     deactivateForm();
     removeFormListeners();
-    window.map.isPageActive = false;
   };
 
   const activateFormListeners = () => {
@@ -185,6 +187,7 @@
     formTimeOut.addEventListener('change', onFormTime);
     formSubmitButton.addEventListener('click', onFormRoomNumber);
     formResetButton.addEventListener('click', onFormResetButton);
+    adForm.addEventListener('submit', submitAdForm);
   };
 
   const removeFormListeners = () => {
@@ -195,6 +198,55 @@
     formTimeOut.removeEventListener('change', onFormTime);
     formSubmitButton.removeEventListener('click', onFormRoomNumber);
     formResetButton.removeEventListener('click', onFormResetButton);
+    adForm.removeEventListener('submit', submitAdForm);
+  };
+  /**
+   * Show success-message
+   */
+  const showSuccess = () => {
+    successMessage.classList.remove('hidden');
+    successMessage.addEventListener('click', onSuccessMessageClick);
+    document.addEventListener('keydown', onSuccessMessageEscDown);
+  };
+  /**
+   * Hidden success-message
+   */
+  const successMessageHidden = () => {
+    successMessage.classList.add('hidden');
+    successMessage.addEventListener('click', onSuccessMessageClick);
+    document.addEventListener('keydown', onSuccessMessageEscDown);
+  };
+  /**
+   * Hidden the success-message when click on it
+   */
+  const onSuccessMessageClick = () => {
+    successMessageHidden();
+  };
+  /**
+   * Hidden the success-message when down Escape
+   * @param evt
+   */
+  const onSuccessMessageEscDown = evt => {
+    window.utils.escDown(evt, successMessageHidden);
+  };
+
+  const successHandler = response => {
+    showSuccess();
+    window.map.deactivateState();
+    deactivateForm();
+    removeFormListeners();
+  };
+  /**
+   * Submit data of adForm
+   * @param evt
+   */
+  const submitAdForm = evt => {
+    window.backend.save(
+      new FormData(adForm),
+      successHandler,
+      window.utils.errorHandler,
+    );
+    evt.preventDefault();
   };
 
   return (window.form = {
