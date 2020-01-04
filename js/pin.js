@@ -1,7 +1,7 @@
 // pin.js
 'use strict';
 
-(function () {
+(function() {
   const template = document.querySelector('template');
   const pinTemplate = template.content.querySelector('.map__pin');
 
@@ -51,11 +51,10 @@
   const renderPins = pins => {
     const pinsFragment = document.createDocumentFragment();
     pins.forEach(pin => pinsFragment.appendChild(createPin(pin)));
-    return pinsFragment;
+    document.querySelector('.map__pins').appendChild(pinsFragment);
   };
 
-  return window.pin = {
+  return (window.pin = {
     renderPins,
-  };
+  });
 })();
-
