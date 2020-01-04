@@ -29,9 +29,7 @@
    */
   const successHandler = ads => {
     window.map.ads = ads;
-    document
-      .querySelector('.map__pins')
-      .appendChild(window.pin.renderPins(ads));
+    window.pin.renderPins(ads);
   };
 
   /**
