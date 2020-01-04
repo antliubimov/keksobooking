@@ -14,11 +14,7 @@
    */
   const removePins = () => {
     const pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    pins.forEach(pin => {
-      if (!pin.classList.contains('map__pin--main')) {
-        pin.remove();
-      }
-    });
+    pins.forEach(pin => pin.remove());
   };
 
   const map = document.querySelector('.map');
@@ -32,6 +28,7 @@
    * @param ads
    */
   const successHandler = ads => {
+    window.map.ads = ads;
     document
       .querySelector('.map__pins')
       .appendChild(window.pin.renderPins(ads));
@@ -162,8 +159,9 @@
 
   mapPinMain.addEventListener('mousedown', onMapPinMainMouseDown);
 
-  return (window.map = {
+  window.map = {
+    removePins,
     deactivateState,
     deactivateMap,
-  });
+  };
 })();
