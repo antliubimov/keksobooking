@@ -37,6 +37,7 @@
    */
   const activateMapFilters = () => {
     mapFilterSelects.forEach(mapFilter => (mapFilter.disabled = false));
+    window.filters.initializeFilters();
     mapFilterFieldset.disabled = false;
   };
   /**
@@ -62,6 +63,7 @@
    */
   const deactivateMapFilters = () => {
     mapFilterSelects.forEach(mapFilter => (mapFilter.disabled = true));
+    window.filters.deactivateFilters();
     mapFilterFieldset.disabled = true;
   };
 
