@@ -5,6 +5,7 @@
   const template = document.querySelector('template');
   const pinTemplate = template.content.querySelector('.map__pin');
 
+  const PINS_MAX = 5;
   /**
    * Remove card on a map
    */
@@ -50,7 +51,9 @@
    */
   const renderPins = pins => {
     const pinsFragment = document.createDocumentFragment();
-    pins.forEach(pin => pinsFragment.appendChild(createPin(pin)));
+    pins
+      .slice(0, PINS_MAX)
+      .forEach(pin => pinsFragment.appendChild(createPin(pin)));
     document.querySelector('.map__pins').appendChild(pinsFragment);
   };
 
