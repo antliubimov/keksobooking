@@ -7,6 +7,13 @@
   const housingRooms = document.querySelector('#housing-rooms');
   const housingGuests = document.querySelector('#housing-guests');
   const housingFeatures = document.querySelector('#housing-features');
+  const housingFilters = [
+    housingType,
+    housingPrice,
+    housingRooms,
+    housingGuests,
+    housingFeatures,
+  ];
 
   const sortTypeRoomsGuests = (...args) => {
     const [type, filter, , ads] = args;
@@ -63,9 +70,18 @@
     window.pin.renderPins(sortArr);
   };
 
-  housingType.addEventListener('change', onFilterClick);
-  housingPrice.addEventListener('change', onFilterClick);
-  housingRooms.addEventListener('change', onFilterClick);
-  housingGuests.addEventListener('change', onFilterClick);
-  housingFeatures.addEventListener('change', onFilterClick);
+  const initializeFilters = () =>
+    housingFilters.forEach(filter =>
+      filter.addEventListener('change', onFilterClick),
+    );
+
+  const deactivateFilters = () =>
+    housingFilters.forEach(filter =>
+      filter.removeEventListener('change', onFilterClick),
+    );
+
+  window.filters = {
+    initializeFilters,
+    deactivateFilters,
+  };
 })();
