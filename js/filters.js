@@ -6,11 +6,23 @@
   const housingPrice = document.querySelector('#housing-price');
   const housingRooms = document.querySelector('#housing-rooms');
   const housingGuests = document.querySelector('#housing-guests');
+  const housingFeatures = document.querySelector('#housing-features');
 
-  const sortHousingType = (type, ads) =>
-    type === 'any' ? ads : ads.filter(ad => ad.offer.type === type);
+  const sortTypeRoomsGuests = (...args) => {
+    const [type, filter, , ads] = args;
+    return ads.filter(ad => ad.offer[filter].toString() === type);
+  };
 
-  const sortHousingPrice = (type, ads) => {
+  const sortFeatures = (...args) => {
+    const [type, filter, checked, ads] = args;
+
+    return checked === true
+      ? ads.filter(ad => ad.offer[filter].includes(type))
+      : ads;
+  };
+
+  const sortPrice = (...args) => {
+    const [type, filter, , ads] = args;
     const price = {
       low(x) {
         return x >= 0 && x < 10000;
@@ -22,32 +34,32 @@
         return x >= 50000;
       },
     };
-    return type === 'any' ? ads : ads.filter(ad => price[type](ad.offer.price));
+    return ads.filter(ad => price[type](ad.offer[filter]));
   };
 
-  const sortHousingRooms = (type, ads) =>
-    type === 'any' ? ads : ads.filter(ad => ad.offer.rooms.toString() === type);
+  const filters = {
+    type: sortTypeRoomsGuests,
+    price: sortPrice,
+    rooms: sortTypeRoomsGuests,
+    guests: sortTypeRoomsGuests,
+    features: sortFeatures,
+  };
 
-  const sortHousingGuests = (type, ads) =>
-    type === 'any'
-      ? ads
-      : ads.filter(ad => ad.offer.guests.toString() === type);
-
-  const filter = {
-    'housing-type': sortHousingType,
-    'housing-price': sortHousingPrice,
-    'housing-rooms': sortHousingRooms,
-    'housing-guests': sortHousingGuests,
-    // 'housing-features': sortHousingFeatures,
+  const sortHousing = (type, filter, checked, ads) => {
+    if (type === 'any') {
+      return ads;
+    } else {
+      return filters[filter](type, filter, checked, ads);
+    }
   };
 
   const onFilterClick = evt => {
     window.map.removePins();
-    console.log(evt);
     const ads = [...window.map.ads];
     const type = evt.target.value;
-    const filterName = evt.target.name;
-    const sortArr = filter[filterName](type, ads);
+    const filterName = evt.target.name.replace(/^housing-/, '');
+    const checked = evt.target.checked;
+    const sortArr = sortHousing(type, filterName, checked, ads);
     window.pin.renderPins(sortArr);
   };
 
@@ -55,4 +67,5 @@
   housingPrice.addEventListener('change', onFilterClick);
   housingRooms.addEventListener('change', onFilterClick);
   housingGuests.addEventListener('change', onFilterClick);
+  housingFeatures.addEventListener('change', onFilterClick);
 })();
