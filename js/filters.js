@@ -71,25 +71,31 @@
     features: [],
   };
 
+  const sortPins = filterList => {
+    let sortArr = [...window.map.ads];
+    for (let filter in filterList) {
+      sortArr = [...sortHousing(filterList[filter], filter, sortArr)];
+    }
+    return sortArr;
+  };
+
   const onFilterClick = evt => {
     window.map.removePins();
     const type = evt.target.value;
     const filterName = evt.target.name.replace(/^housing-/, '');
     const checked = evt.target.checked;
-    let sortArr = [...window.map.ads];
+
     if (filterName === 'features') {
       if (checked) {
-        filterList.features.push(type);
+        filterList[filterName].push(type);
       } else {
-        filterList.features.splice(filterList.features.indexOf(type), 1);
+        filterList[filterName].splice(filterList[filterName].indexOf(type), 1);
       }
     } else {
       filterList[filterName] = type;
     }
 
-    for (let filter in filterList) {
-      sortArr = [...sortHousing(filterList[filter], filter, sortArr)];
-    }
+    const sortArr = sortPins(filterList);
 
     window.pin.renderPins(sortArr);
   };
