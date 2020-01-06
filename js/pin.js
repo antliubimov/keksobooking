@@ -57,7 +57,8 @@
     document.querySelector('.map__pins').appendChild(pinsFragment);
   };
 
-  return (window.pin = {
+  window.pin = {
+    removeMapCard,
     renderPins,
-  });
+  };
 })();
