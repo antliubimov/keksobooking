@@ -16,20 +16,20 @@
   ];
 
   const sortTypeRoomsGuests = (...args) => {
-    const [type, filter, , ads] = args;
+    const [type, filter, ads] = args;
     return ads.filter(ad => ad.offer[filter].toString() === type);
   };
 
   const sortFeatures = (...args) => {
-    const [type, filter, checked, ads] = args;
+    const [types, filter, ads] = args;
 
-    return checked === true
-      ? ads.filter(ad => ad.offer[filter].includes(type))
-      : ads;
+    return ads.filter(ad =>
+      types.every(type => ad.offer[filter].includes(type)),
+    );
   };
 
   const sortPrice = (...args) => {
-    const [type, filter, , ads] = args;
+    const [type, filter, ads] = args;
     const price = {
       low(x) {
         return x >= 0 && x < 10000;
@@ -52,21 +52,45 @@
     features: sortFeatures,
   };
 
-  const sortHousing = (type, filter, checked, ads) => {
-    if (type === 'any') {
+  const sortHousing = (type, filter, ads) => {
+    if (
+      type === 'any' ||
+      (filter === 'features' && filterList[filter].length === 0)
+    ) {
       return ads;
     } else {
-      return filters[filter](type, filter, checked, ads);
+      return filters[filter](type, filter, ads);
     }
+  };
+
+  const filterList = {
+    type: 'any',
+    price: 'any',
+    rooms: 'any',
+    guests: 'any',
+    features: [],
   };
 
   const onFilterClick = evt => {
     window.map.removePins();
-    const ads = [...window.map.ads];
     const type = evt.target.value;
     const filterName = evt.target.name.replace(/^housing-/, '');
     const checked = evt.target.checked;
-    const sortArr = sortHousing(type, filterName, checked, ads);
+    let sortArr = [...window.map.ads];
+    if (filterName === 'features') {
+      if (checked) {
+        filterList.features.push(type);
+      } else {
+        filterList.features.splice(filterList.features.indexOf(type), 1);
+      }
+    } else {
+      filterList[filterName] = type;
+    }
+
+    for (let filter in filterList) {
+      sortArr = [...sortHousing(filterList[filter], filter, sortArr)];
+    }
+
     window.pin.renderPins(sortArr);
   };
 
