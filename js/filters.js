@@ -15,6 +15,16 @@
     housingFeatures,
   ];
 
+  const defaultHousingFilters = () => {
+    housingFilters.forEach(filter => {
+      if (filter === housingFeatures) {
+        [...filter.elements].forEach(elem => (elem.checked = false));
+      } else {
+        filter.options.selectedIndex = 0;
+      }
+    });
+  };
+
   const sortTypeRoomsGuests = (...args) => {
     const [type, filter, ads] = args;
     return ads.filter(ad => ad.offer[filter].toString() === type);
@@ -80,6 +90,7 @@
   };
 
   const onFilterClick = evt => {
+    window.pin.removeMapCard();
     window.map.removePins();
     const type = evt.target.value;
     const filterName = evt.target.name.replace(/^housing-/, '');
@@ -105,12 +116,15 @@
       filter.addEventListener('change', onFilterClick),
     );
 
-  const deactivateFilters = () =>
+  const deactivateFilters = () => {
+    defaultHousingFilters();
     housingFilters.forEach(filter =>
       filter.removeEventListener('change', onFilterClick),
     );
+  };
 
   window.filters = {
+    defaultHousingFilters,
     initializeFilters,
     deactivateFilters,
   };
