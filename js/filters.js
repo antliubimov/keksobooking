@@ -108,7 +108,7 @@
 
     const sortArr = sortPins(filterList);
 
-    window.pin.renderPins(sortArr);
+    window.debounce(window.pin.renderPins(sortArr));
   };
 
   const initializeFilters = () =>

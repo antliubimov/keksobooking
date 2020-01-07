@@ -4,7 +4,7 @@
 (function() {
   const DEBOUNCE_INTERVAL = 500;
 
-  window.debounce = fn => {
+  window.debounce = function(fn) {
     let lastTimeout = null;
 
     return function() {
