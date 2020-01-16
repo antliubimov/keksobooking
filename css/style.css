@@ -599,7 +599,6 @@ textarea:focus {
 
 .notice__form .upload {
   display: flex;
-
   min-height: 70px;
 }
 
@@ -629,6 +628,11 @@ textarea:focus {
 }
 
 .form__photo-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
   width: 140px;
 }
 
@@ -641,6 +645,9 @@ textarea:focus {
 
   background-color: #e4e4de;
   border-radius: 5px;
+}
+.form__photo img {
+  vertical-align: middle;
 }
 
 .form__element--submit {
