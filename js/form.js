@@ -25,7 +25,7 @@
 
   const mapPinMain = document.querySelector('.map__pin--main');
   const adForm = document.querySelector('.notice__form');
-  const formFieldSets = document.querySelectorAll('.form__element');
+  const formFieldSets = document.querySelectorAll('.notice__form fieldset');
   const formTitle = document.querySelector('#title');
   const formAddress = document.querySelector('#address');
   const formHouseType = document.querySelector('#type');
