@@ -494,6 +494,13 @@ textarea:focus {
   width: 100%;
 }
 
+.notice__field {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 150px;
+}
+
 .notice__form--disabled {
   opacity: 0.3;
 }
@@ -590,11 +597,6 @@ textarea:focus {
   height: 230px;
 }
 
-.notice__form input[type=file] {
-  position: absolute;
-  left: -900em;
-}
-
 .notice__form .upload {
   display: flex;
 
@@ -615,6 +617,7 @@ textarea:focus {
   font-size: 14px;
   box-sizing: border-box;
   padding: 10px 10px 5px;
+  cursor: pointer;
 }
 
 .notice__form .drop-zone:hover {
