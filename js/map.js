@@ -87,6 +87,11 @@
     deactivateMap();
     isPageActive = false;
   };
+
+  const Coordinate = (x, y) => {
+    this.x = x;
+    this.y = y;
+  }
   /**
    * Drag-n-drop on mapPinMain
    * @param evt
@@ -94,30 +99,18 @@
   const onMapPinMainMouseDown = evt => {
     evt.preventDefault();
 
-    let startCoords = {
-      x: evt.clientX,
-      y: evt.clientY,
-    };
+    let startCoords = Coordinate(evt.clientX, evt.clientY);
 
     let dragged = false;
 
     const onMouseMove = moveEvt => {
       moveEvt.preventDefault();
 
-      const shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY,
-      };
+      const shift = Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY,
-      };
+      startCoords = Coordinate(moveEvt.clientX, moveEvt.clientY);
 
-      const mainPinPosition = {
-        x: mapPinMain.offsetLeft - shift.x,
-        y: mapPinMain.offsetTop - shift.y,
-      };
+      const mainPinPosition = (mapPinMain.offsetLeft - shift.x, mapPinMain.offsetTop - shift.y);
 
       const BORDER = {
         top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
