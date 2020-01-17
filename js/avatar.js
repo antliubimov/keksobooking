@@ -20,10 +20,6 @@
     avatarPreview.src = src;
   };
 
-  const addDefaultAvatar = () => {
-    addAvatar(DEFAULT_AVATAR);
-  };
-
   const addPhotos = (src) => {
     const div = document.createElement('div');
     div.classList.add('form__photo');
@@ -37,6 +33,7 @@
   };
 
   const removePhotos = () => {
+    addAvatar(DEFAULT_AVATAR);
     const photos = document.querySelectorAll('form__photo');
     photos.forEach(photo => photo.remove());
   };
@@ -76,6 +73,7 @@
   };
 
   window.avatar = {
+    removePhotos,
     activateChoosers,
     deactivateChoosers
   };
