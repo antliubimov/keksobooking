@@ -157,6 +157,7 @@
   const activateForm = () => {
     adForm.classList.remove('notice__form--disabled');
     activateAdFields();
+    window.avatar.activateChoosers();
   };
   /**
    * Deactivate form
@@ -165,8 +166,7 @@
     adForm.reset();
     adForm.classList.add('notice__form--disabled');
     deactivateAdFields();
-    //  window.loadImage.deactivate();
-    //  window.loadImage.remove();
+    window.avatar.deactivateChoosers();
   };
 
   /**
