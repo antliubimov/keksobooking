@@ -48,7 +48,7 @@
       if (matches) {
         const reader = new FileReader();
 
-        reader.addEventListener('load', function(evt) {
+        reader.addEventListener('load', (evt) => {
           fn(evt.target.result);
         });
 
@@ -74,18 +74,6 @@
     e.stopPropagation();
   }
 
-  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, preventDefaults, false))
-  });
-
-  ['dragenter', 'dragover'].forEach(eventName => {
-    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, highlight, false))
-  });
-
-  ['dragleave', 'drop'].forEach(eventName => {
-    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, unhighlight, false))
-  });
-
   function highlight(e) {
     e.target.classList.add('highlight');
   }
@@ -93,8 +81,6 @@
   function unhighlight(e) {
     e.target.classList.remove('highlight');
   }
-
-  [...dropZones].forEach(dropZone => dropZone.addEventListener('drop', handleDrop, false));
 
   function handleDrop(e) {
     const dt = e.dataTransfer;
@@ -106,10 +92,35 @@
   const activateChoosers = () => {
     avatarChooser.addEventListener('change', onAvatarChange);
     photosChooser.addEventListener('change', onPhotosChange);
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, preventDefaults))
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, highlight))
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, unhighlight))
+    });
+    [...dropZones].forEach(dropZone => dropZone.addEventListener('drop', handleDrop));
   };
+
   const deactivateChoosers = () => {
     avatarChooser.removeEventListener('change', onAvatarChange);
     photosChooser.removeEventListener('change', onPhotosChange);
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.removeEventListener(eventName, preventDefaults))
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.removeEventListener(eventName, highlight))
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      [...dropZones].forEach(dropZone => dropZone.removeEventListener(eventName, unhighlight))
+    });
+    [...dropZones].forEach(dropZone => dropZone.removeEventListener('drop', handleDrop));
   };
 
   window.avatar = {
