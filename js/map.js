@@ -4,10 +4,7 @@
 (function() {
   let isPageActive = false;
 
-  const PIN_SIZE = window.data.PIN_SIZE;
-  const TAIL_HEIGHT = window.data.TAIL_HEIGHT;
-  const MAIN_PIN = window.data.MAIN_PIN;
-  const DRAG_LIMIT = window.data.DRAG_LIMIT;
+  const { PIN_SIZE, TAIL_HEIGHT, MAIN_PIN, DRAG_LIMIT } = window.data;
 
   /**
    * Remove all pins on map
