@@ -85,10 +85,31 @@
     isPageActive = false;
   };
 
-  const Coordinate = (x, y) => {
+  const Coordinate = function(x, y, constraints) {
     this.x = x;
     this.y = y;
-  }
+    this._constraints = constraints;
+  };
+
+  Coordinate.prototype.setX = function(x) {
+    if (x >= this._constraints.left && x <= this._constraints.right) {
+      this.x = x;
+    }
+  };
+
+  Coordinate.prototype.setY = function(y) {
+    if (y >= this._constraints.top && y <= this._constraints.bottom) {
+      this.y = y;
+    }
+  };
+
+  const Rect = function(left, top, right, bottom) {
+    this.left = left;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+  };
+
   /**
    * Drag-n-drop on mapPinMain
    * @param evt
@@ -96,38 +117,25 @@
   const onMapPinMainMouseDown = evt => {
     evt.preventDefault();
 
-    let startCoords = Coordinate(evt.clientX, evt.clientY);
+    let startCoords = new Coordinate(evt.clientX, evt.clientY);
 
     let dragged = false;
 
     const onMouseMove = moveEvt => {
       moveEvt.preventDefault();
 
-      const shift = Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY);
+      dragged = true;
 
-      startCoords = Coordinate(moveEvt.clientX, moveEvt.clientY);
+      const BORDER = new Rect(DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH / 2, DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT, DRAG_LIMIT.X.MAX + PIN_SIZE.WIDTH / 2, DRAG_LIMIT.Y.MAX - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT);
 
-      const mainPinPosition = (mapPinMain.offsetLeft - shift.x, mapPinMain.offsetTop - shift.y);
+      const shift = new Coordinate(startCoords.x - moveEvt.clientX, startCoords.y - moveEvt.clientY, BORDER);
 
-      const BORDER = {
-        top: DRAG_LIMIT.Y.MIN - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
-        bottom: DRAG_LIMIT.Y.MAX - MAIN_PIN.HEIGHT / 2 - TAIL_HEIGHT,
-        left: DRAG_LIMIT.X.MIN - PIN_SIZE.WIDTH / 2,
-        right: DRAG_LIMIT.X.MAX + PIN_SIZE.WIDTH / 2,
-      };
+      startCoords = new Coordinate(moveEvt.clientX, moveEvt.clientY, BORDER);
 
-      if (
-        mainPinPosition.y >= BORDER.top &&
-        mainPinPosition.y <= BORDER.bottom
-      ) {
-        mapPinMain.style.top = `${mainPinPosition.y}px`;
-      }
-      if (
-        mainPinPosition.x >= BORDER.left &&
-        mainPinPosition.x <= BORDER.right
-      ) {
-        mapPinMain.style.left = `${mainPinPosition.x}px`;
-      }
+      const mainPinPosition = new Coordinate(mapPinMain.offsetLeft - shift.x, mapPinMain.offsetTop - shift.y, BORDER);
+
+      mapPinMain.style.left = `${mainPinPosition.x}px`;
+      mapPinMain.style.top = `${mainPinPosition.y}px`;
     };
 
     const onMouseUp = upEvt => {
