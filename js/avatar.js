@@ -5,6 +5,13 @@
   const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
   const DEFAULT_AVATAR = 'img/muffin.png';
 
+  const ImageParams = {
+    WIDTH: '70px',
+    HEIGHT: '70px',
+    BORDER_RADIUS: '5px'
+  };
+
+
   const avatarChooser = document.querySelector('#avatar');
   const photosChooser = document.querySelector('#images');
   const avatarPreview = document.querySelector('.notice__preview img');
@@ -19,8 +26,11 @@
     div.classList.add('form__photo');
     const img = document.createElement('img');
     img.src = src;
-    photosPreview.appendChild(div);
+    img.style.width = ImageParams.WIDTH;
+    img.style.height = ImageParams.HEIGHT;
+    img.style.borderRadius = ImageParams.BORDER_RADIUS;
     div.appendChild(img);
+    photosPreview.appendChild(div);
   };
 
   const onAvatarChange = (evt) => {
