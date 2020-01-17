@@ -613,9 +613,11 @@ textarea:focus {
   border-radius: 5px;
   text-align: center;
   height: 70px;
+  width: 130px;
   font-size: 14px;
   box-sizing: border-box;
   padding: 10px 10px 5px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
@@ -633,7 +635,6 @@ textarea:focus {
   display: flex;
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  width: 140px;
 }
 
 .form__photo {
