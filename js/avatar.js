@@ -39,20 +39,24 @@
   };
 
   const loadFile = (target, fn) => {
-    const file = target.files[0];
-    const fileName = file.name.toLowerCase();
+    const files = target.files;
+    [...files].forEach(file => {
+      const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some(it => fileName.endsWith(it));
+      const matches = FILE_TYPES.some(it => fileName.endsWith(it));
 
-    if (matches) {
-      const reader = new FileReader();
+      if (matches) {
+        const reader = new FileReader();
 
-      reader.addEventListener('load', function(evt) {
-        fn(evt.target.result);
-      });
+        reader.addEventListener('load', function(evt) {
+          fn(evt.target.result);
+        });
 
-      reader.readAsDataURL(file);
-    }
+        reader.readAsDataURL(file);
+      }
+     }
+    );
+
   };
 
   const onAvatarChange = (evt) => {
@@ -62,6 +66,42 @@
   const onPhotosChange = (evt) => {
     loadFile(evt.target, addPhotos);
   };
+
+  const dropZones = document.querySelectorAll('.drop-zone');
+
+  function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, preventDefaults, false))
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, highlight, false))
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    [...dropZones].forEach(dropZone => dropZone.addEventListener(eventName, unhighlight, false))
+  });
+
+  function highlight(e) {
+    e.target.classList.add('highlight');
+  }
+
+  function unhighlight(e) {
+    e.target.classList.remove('highlight');
+  }
+
+  [...dropZones].forEach(dropZone => dropZone.addEventListener('drop', handleDrop, false));
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const fn = (e.target.htmlFor === 'avatar') ? addAvatar: addPhotos;
+
+    loadFile(dt, fn);
+  }
 
   const activateChoosers = () => {
     avatarChooser.addEventListener('change', onAvatarChange);

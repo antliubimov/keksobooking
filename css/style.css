@@ -803,3 +803,8 @@ textarea:focus {
 .footer-social-item-vk {
   background-position: -10px -10px;
 }
+
+
+.highlight {
+  background-color: aquamarine;
+}
