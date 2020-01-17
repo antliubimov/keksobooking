@@ -34,7 +34,7 @@
 
   const removePhotos = () => {
     addAvatar(DEFAULT_AVATAR);
-    const photos = document.querySelectorAll('form__photo');
+    const photos = document.querySelectorAll('.form__photo');
     photos.forEach(photo => photo.remove());
   };
 
