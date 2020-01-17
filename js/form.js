@@ -166,6 +166,7 @@
     adForm.reset();
     adForm.classList.add('notice__form--disabled');
     deactivateAdFields();
+    window.avatar.removePhotos();
     window.avatar.deactivateChoosers();
   };
 
